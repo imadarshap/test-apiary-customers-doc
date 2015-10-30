@@ -1,0 +1,3416 @@
+FORMAT: 1A
+HOST: https://api.mylimobiz.com/
+# ASP.NET Web API Help Page
+## Overview
+
+The LAAPINEW is a programmatic interface for automating tasks and developing custom applications for usage Limo Anywhere system.
+API allows you to interact with our system programmatically from your own application.
+Using the API you interact with Resources such as:
+- Reservations
+- Customer Profiles
+- Reference Data, eg: Airports, Addresses, POIs, FBOs, Service Types etc.
+- Notification subscriptions
+
+The API attempts to conform to the <a href="https://en.wikipedia.org/wiki/Representational_state_transfer"> RESTful </a> design principles.
+You interact with the resources exposed via the API by accessing resource collection and element URIs using the HTTP verbs (GET, POST, PUT, and DELETE).
+API accepts and returns JSON data.
+## HTTP status codes
+
+|Status Code |Description |
+|-------------------|-----------------------------------------------------------------------------------------------------------|
+|200 | OK. Everything worked as expected. |
+|201 | Created. Returns a 201 after a successful POST where a resource was created. |
+|202 | Accepted. Returns a 202 after a successful operation. |
+|204 | NO Content. Returns a 204 if no content for GET request. |
+|400 | Bad request. |
+|403 | Forbidden. Also used for unauthorized requests such as improper OAuth 2.0 scopes or permissions issues. |
+|404 | Not found. |
+|409 | Conflict*. Needs to be resolved before the request can be made. |
+|429 | Too Many Requests. Rate limited. |
+|500 | Internal Server Error. |
+
+
+* Conflict can be provoked by very many reasons. So in case of 409 error pay special attention to response reason phrase that can help to determine case of conflict more quickly.
+
+
+##Group Authentication
+The API uses the <a href="https://tools.ietf.org/html/rfc6749#appendix-B"> OAuth 2.0 </a> protocol for simple, but effective authentication and authorization.
+Most API endpoints require an OAuth access token, thus we are exposing a service that will provide the user with an OAuth 2 Access token.
+This token should be provided in the header for all services that require customer to be authenticated.
+
+We support 2 ways of obtaining Authorization and also opportunity to refresh Access token.
+- <b>Client Credentials Grant</b>
+- <b>Resource Owner Credentials Grant</b>
+
+For more detail of each you can visit <a href="https://tools.ietf.org/html/rfc6749#appendix-B"> here </a>.
+
+<b> Basic Steps for get and refresh 'access_token': </b>
+
+1. Choose one of the suitable methods of obtaining Authorization from section "GET Access Token".
+2. Create appropriate request. Parameter `grant_type` will depend on Authorization method
+- for "Client Credentials Grant" - `client_credentials`
+- for "Resource Owner Credentials Grant" - `password`
+
+
+3. For refresh `access_token` use "Refresh Access Token" and method "Refresh". Parameter `grant_type` determine as `refresh_token`
+
+The tables below describe all possible request/response parameters:
+
+#####Request:
+
+| Parameter | Description |
+|------------------|-------------------------------------------------------------------------------------------------------------------------|
+| grant_type | Type of Grant described above. Possible values: `client_credentials`, `authorization_code`, `password`, `refresh_token` |
+| client_id | The client ID of your application |
+| client_secret | The client Secret of your application |
+| company_alias | The Alias of you company |
+| username | Username or Email |
+| passwod | Password |
+
+#####Response:
+
+| Parameter | Description |
+|------------------|------------------------------------------------------------|
+| access_token | Access Token |
+| token_type | Token type (Always `bearer`) |
+| expires_in | Expiration time of Access token (15 min after getting) |
+| refresh_token | Refresh Token |
+
+
+### Possible Authentication Errors
+
+| Parameter | Description |
+|-------------------------------|---------------------------------------------------------------|
+| invalid_request | Required parameters were not provided |
+| invalid_client | The Сlient ID or Clernt secret provided is invalid |
+| invalid_scope (not used now) | The scope parameter provided is not a valid subset of scopes |
+| unsupported_grant_type | Unsupported Grand Type provided |
+
+
+In 'execution' console you can see request/response samples, data types and sizes of parameters
+
+## GET Access Token [/get]
+
+### Client Credentials Grant [POST /oauth2/token]
+
++ Request
+
+    + `grant_type` (string) Required. String length: inclusive between 0 and 50.
+    + `client_id` (string) Required. String length: inclusive between 6 and 50.
+    + `client_secret` (string) Required. String length: inclusive between 50 and 50.
+ 
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "grant_type": "client_credentials",
+                "client_id": "la_customer_test",
+                "client_secret": "lcfLYzj7RaUgmRp8sVngt2fpD5GaBJ19Ptt2MrNSlF57GI5kAR",
+            }
+
++ Response 200 (application/json)
+    
+    + Body
+
+            {
+                "access_token": "YE0W7CSdfVaQFmC8GTQ1",
+                "token_type": "bearer",
+                "expires_in": 3600,
+            }
+
+### Resource Owner Credentials Grant [POST /oauth2/token]
+
++ Request
+
+    + `grant_type` (string) Required. String length: inclusive between 0 and 50.
+    + `client_id` (string) Required. String length: inclusive between 6 and 50.
+    + `client_secret` (string) Required. String length: inclusive between 50 and 50.
+    + `company_alias` (string) String length: inclusive between 0 and 50.
+    + `username` (string) String length: inclusive between 0 and 50.
+    + `password` (string) String length: inclusive between 0 and 50.
+ 
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "grant_type": "password",
+                "client_id": "la_customer_test",
+                "client_secret": "lcfLYzj7RaUgmRp8sVngt2fpD5GaBJ19Ptt2MrNSlF57GI5kAR",
+                "company_alias": "test_alias",
+                "username": "admin",
+                "password": "password"
+            }
+
++ Response 200 (application/json)
+    
+    + Body
+
+            {
+                "access_token": "YE0W7CSdfVaQFmC8GTQ1",
+                "refresh_token": "yuMF7U7FHMCL2cuI5qKV",
+                "token_type": "bearer",
+                "expires_in": 3600
+            }
+
+## Refresh Access Token [/refresh]
+
+### Refresh [POST /oauth2/token]
+
++ Request
+
+    + `grant_type` (string) Required. String length: inclusive between 0 and 50.
+    + `refresh_token` (string) Required. String length: 20.
+    + `client_id` (string) Required. String length: inclusive between 6 and 50.
+    + `client_secret` (string) Required. String length: inclusive between 50 and 50.
+ 
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "grant_type": "refresh_token",
+                "refresh_token": "CSYE0W7dfVaQFmC8GTQPL",
+                "client_id": "la_customer_test",
+                "client_secret": "lcfLYzj7RaUgmRp8sVngt2fpD5GaBJ19Ptt2MrNSlF57GI5kAR"
+            }
+
++ Response 200 (application/json)
+    
+    + Body
+
+            {
+                "access_token": "YE0W7CSdfVaQFmC8GTQ1",
+                "token_type": "bearer",
+                "expires_in": 3600
+            }
+
+
+## Group Rental Agreement
+Provides read operations with Rental Agreement.
+
+
+## Get [/Get]
+This method returns Rental Agreement by Id.
+
+### Get [GET /companies/{company_alias}/rental_agreements/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "created_at": "2015-10-30T17:28:05+02:00", "updated_at": "2015-10-30T17:28:05+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true }
+
+
+## Group Fbo
+Provides read operation for FBO(s) (Private Airlines)
+
+
+## Collection [/Collection]
+Returns paged collection of FBO(s).
+
+### Get Collection [GET /companies/{company_alias}/fbos?search={search}&page_index={page_index}&page_size={page_size}&is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true }, { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true } ] }
+
+
+## Group Service Type
+Provides operations for Service Type(s).
+
+
+## Get [/Get]
+Returns Service Type by Id and by Code.
+
+### Get [GET /companies/{company_alias}/service_types/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
+
+
+### Get By Code [GET /companies/{company_alias}/service_types?code={code}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + code: (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
+
+
+## Collection [/Collection]
+Returns collection of Service Types.
+
+### Get Collection [GET /companies/{company_alias}/service_types?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }, { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true } ]
+
+
+## Group Airport
+Provides read operations for Airport(s)
+
+
+## Collection [/Collection]
+Returns paged collection of Airports.
+
+### Get Collecton [GET /airports?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 }, { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 } ] }
+
+
+## Group Customer Self Subscriptions
+Provides viewing and editing operations of the customer subscriptions.
+
+
+## iOS [/iOS]
+Operations of iOS device subscriptions on topics for customer.
+
+### Get [GET /customers/self/subscriptions/ios]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
+
+
+### Create or Update [PUT /customers/self/subscriptions/ios]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/ios]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+## Android [/Android]
+Operations of Android device subscriptions on topics for customer.
+
+### Create or Update [PUT /customers/self/subscriptions/android]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/android]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/android]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
+
+
+## SMS [/SMS]
+Operations of cellular phone number subscriptions on topics for customer.
+
+### Create or Update [PUT /customers/self/subscriptions/sms]
+
++ Parameters
+
++ Request
+
+    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "phone_number": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/sms]
+
++ Parameters
+
++ Request
+
+    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "phone_number": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/sms]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "phone_number": "sample string 1" }, { "phone_number": "sample string 1" } ]
+
+
+## Web Hook [/Web Hook]
+Operations of web hook subscriptions on topics for customer.
+
+### Create ore update [PUT /customers/self/subscriptions/webhook]
+
++ Parameters
+
++ Request
+
+    + `uri` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "uri": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/webhook]
+
++ Parameters
+
++ Request
+
+    + `uri` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "uri": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/webhook]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "uri": "sample string 1" }, { "uri": "sample string 1" } ]
+
+
+## Group Promotion Code
+Provides operations for Promotion Code(s).
+
+
+## Get [/Get]
+Returns Promotion Code.
+
+### Get [GET /companies/{company_alias}/promotion_codes/{code}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + code: (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }
+
+
+## Collection [/Collection]
+Returns collection of Promotion Codes.
+
+### Get Collection [GET /companies/{company_alias}/promotion_codes]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] } ]
+
+
+## Group Customer Sign Up
+Provides operations that allow customers to create new account in LA system.
+
+
+## Sign Up [/Sign Up]
+
+### Sign Up [POST /companies/{company_alias}/customers/sign_up]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `password` (string) Required. String length: inclusive between 6 and 50.
+    + `prefix` (string) String length: inclusive between 0 and 50.
+    + `first_name` (string) Required. String length: inclusive between 0 and 50.
+    + `last_name` (string) Required. String length: inclusive between 0 and 50.
+    + `position` (string) String length: inclusive between 0 and 50.
+    + `department` (string) String length: inclusive between 0 and 50.
+    + `company` (string) String length: inclusive between 0 and 50.
+    + `address` (object)
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `emails` (array)
+    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `emails[].type` (object)
+    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1", "password": "sample string 2", "prefix": "sample string 3", "first_name": "sample string 4", "last_name": "sample string 5", "position": "sample string 6", "department": "sample string 7", "company": "sample string 8", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "home_phone": "sample string 9", "office_phone": "sample string 10", "cellular_phone1": "sample string 11", "cellular_phone2": "sample string 12", "cellular_phone3": "sample string 13", "fax1": "sample string 14", "fax2": "sample string 15", "emails": [ { "email": "sample string 1" }, { "email": "sample string 1" } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+## Validation [/Validation]
+
+### Validate Email [POST /companies/{company_alias}/customers/emails/validate]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1" }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+### Validate Company [POST /companies/{company_alias}/customers/companies/validate]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `company` (string) Required. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "company": "sample string 1" }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+## Group Customer Password
+Provides operations for password set or reset.
+
+
+## Init Set [/Init Set]
+This allows to set the client password
+
+### Init Set [POST /companies/{company_alias}/customers/passwords/init_set]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1" }
+
+
+## Reset [/Reset]
+This allows to re-set the client password
+
+### Reset [POST /companies/{company_alias}/customers/passwords/set]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `token` (string) Required. String length: inclusive between 10 and 10.
+    + `new_password` (string) Required. Matching regular expression pattern: ^((?=.*\d)(?=.*\w)(?=.*\W).{8,50})$. String length: inclusive between 8 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "token": "sample string 1", "new_password": "sample string 2" }
+
+
+## Group ORES 4 Service Type
+Provides operations for ORES 4 Service Type resources. (In future will be joined with Service Type as sub-model)
+
+
+## Get [/Get]
+Returns Service Type.
+
+### Get [GET /companies/{company_alias}/ores4/service_types/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }
+
+
+## Collection [/Collection]
+Returns collection of Service Types.
+
+### Get Collection [GET /companies/{company_alias}/ores4/service_types]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }, { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 } ]
+
+
+## Group Referral Source
+Provides operations for Referral Source resources.
+
+
+## Get Collection [/Get Collection]
+Returns collection of company Referral Sources.
+
+### Get Collection [GET /companies/{company_alias}/lists/referral_sources?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true }, { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true } ]
+
+
+## Group Booking
+
+
+Provides methods that allow to see and choose optimal pricing, create reseravation and update existing.
+Also allow to create Quote with ability to convert in reservation.
+
+
+<b> Basic Steps for create/update reservation: </b>
+
+1. Call <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/rate-lookup">Rate Lookup</a> method to get list of pricing accordance with your requirements. Choose optimal pricing and hold `Id` of this rate from `results` array. For receiving detailed information of chosen rate call<a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/get-rate-details">Get Rate Details</a> method.
+
+2. Use <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/booking/booking">Booking</a> method. In `search_result_id` parameter set you choosed rate Id and provide additional necessary information: payment, passengers, optional rates etc.
+
+3. For crate return reservation fill `return_trip_info` object in booking request same as original trip information.
+
+4. If you need to update existing reservation use <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/booking/update-booking">Update Booking</a> method. Request information is same as for `Booking` method
+
+*For realization booking process with minimal set of fields just use only required parameters.*
+
+<b> Basic Steps for create quote: </b>
+
+1. Call <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/rate-lookup">Rate Lookup</a> method to get list of pricing accordance with your requirements. Choose optimal pricing and hold `Id` of this rate from `results` array. For receiving detailed information of chosen rate call <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/get-rate-details">Get Rate Details</a> method. For receiving detailed information of chosen rate call <a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/get-rate-details">Get Rate Details</a> method.
+
+2. Use<a href="https://jsapi.apiary.io/previews/laapi2new/reference/booking/rate-lookup/create-quote">Create Quote</a> method. In `search_id` parameter search Id from <a href="http://docs.laapi2new.apiary.io/#reference/booking/rate-lookup/rate-lookup">Rate Lookup</a> and provide additional necessary information (same as for <a href="http://docs.laapi2new.apiary.io/#reference/booking/booking/booking">Booking</a> process)
+
+
+In tables below described parameters for Booking process methods:
+
+
+#### *Rate Lookup* request parameters
+
+| Name | Type |Required| Description |
+|-----------------------------------------------|-----------|--------|--------------------------------------------------------------------------------------|
+| billing_contact_id | integer |No | Id of Billing Contact |
+| passenger_id | integer |No | Id of Passenger |
+| service_type_id | integer |No | Id of Service Type |
+| passenger_count | integer |Yes | Count of Passengers |
+| luggage_count | integer |No | Count of Lagguage (Default value: 0) |
+| infant_child_seat_count | integer |No | Count of "Infant" child seats (Default value: 0) |
+| booster_child_seat_count | integer |No | Count of "Booster" child seats (Default value: 0) |
+| toddler_child_seat_count | integer |No | Count of "Toddler" child seats (Default value: 0) |
+| is_handicap_access_required | boolean |No | Is Required Handicap Access (Default Value: false) |
+| vehicle_types | array |No | Array of Id's preferred Vehicle Types |
+| promotion_code | string |No | Promotion Code |
+| scheduled_pickup_at | object |Yes | Pick Up Date and Time |
+| duration | integer |No | Trip Duration (In seconds) |
+| distance | float |No | Trip Distance (In meters) |
+| pickup | object |Yes | Pick Up Location Information |
+| pickup.type | object |Yes | Type of Pick Up Address. Possible values: `address`,`poi`,`fbo`,`airport`,`seaport` |
+| pickup.scheduled_arriving_at | object |No | Drop Off Date and Time |
+| pickup.instructions | string |No | Pick Up location instructions |
+| pickup.address | object |Yes* | Pick Up Address (Required when `pickup.type` is `address` ) |
+| pickup.address.name | string |No | Address Name |
+| pickup.address.phone | string |No | Phone |
+| pickup.address.country_code | string |No | Country Code |
+| pickup.address.state_code | string |No | State Code |
+| pickup.address.postal_code | string |No | Postal/Zip Code |
+| pickup.address.county | string |No | County |
+| pickup.address.city | string |No | City |
+| pickup.address.address_line1 | string |No | Address Line 1 |
+| pickup.address.address_line2 | string |No | Address Line 2 |
+| pickup.address.latitude | float |Yes | Latitude |
+| pickup.address.longitude | float |Yes | Longitude |
+| pickup.flight | object |Yes* | Pick Up Flight Information (Required when `pickup.type` is "airport") |
+| pickup.flight.airport_code | string |Yes | Airport Code (For `pickup.type` = "airport") |
+| pickup.flight.airline_code | string |No | Airline Code |
+| pickup.flight.flight_number | string |No | Flight Number |
+| pickup.flight.tail_number | string |No | Tail Number |
+| pickup.cruise | object |Yes* | Pick Up Cruise Information (Required when `pickup.type` is `seaport`) |
+| pickup.cruise.seaport_code | string |Yes | Seaport code |
+| pickup.cruise.cruise_ship_name | string |No | Cruise Ship Name |
+| pickup.cruise.cruiseline_name | string |No | Cruise Line Name |
+| pickup.cruise.departing_to_or_arriving_from | string |No | Cruise Departing From or Arriving to |
+| pickup.cruise.departing_or_arriving_at | string |No | Cruise Departing or Arriving at |
+| stops | object |No | Array of Stops (Included objects same with `pickup`) |
+| dropoff | object |No | Drop off Location Information (Included objects same with `pickup`) |
+
+
+#### *Rate Lookup* response parameters
+
+| Name |Type |Description |
+|-----------------------------------|-----------|---------------------------------------------------|
+| search_id | integer | Id of search result |
+| service_type_id | integer | Id of Service Type |
+| rental_agreement_id | integer | Id of Rental agreement |
+| results | array | Array of charge results |
+| results[].id | integer | Search result Id (requires for booking) |
+| results[].vehicle_type_id | integer | Vehicle type Id |
+| results[].vehicle_type_name | string | Vehicle type Name |
+| results[].vehicle_type_description| string | Vehicle type Description |
+| results[].vehicle_type_images | array | Array of Vehicle Type images |
+| results[].passenger_capacity | integer | Passenger Capacity |
+| results[].luggage_capacity | integer | Luggage Capacity |
+| results[].is_handicap_accessible | boolean | Is Handicap Accessible |
+| results[].has_optional_charges | boolean | Is Rate have Optional Charges |
+| results[].original_total_amount | float | Total Rate Amount (Without optional charges) |
+| results[].total_amount | float | Total Rate Amount |
+
+
+#### *Get Rate Details* response parameters
+
+| Name |Type |Description |
+|-------------------------------------------------------|-----------|---------------------------------------------------|
+| original_charges | array | Original charges (without optional) |
+| original_charges[].rate_id | integer | Charge Id |
+| original_charges[].group | string | Charge group |
+| original_charges[].name | string | Charge name |
+| original_charges[].details | object | Charge details |
+| original_charges[].details.type | string | Charge details type |
+| original_charges[].details.unit_value | integer | Charge unit value |
+| original_charges[].details.unit_count | integer | Charge unit count |
+| original_charges[].details.is_vat_tax | boolean | Charge is VAT Tax |
+| original_charges[].value | float | Charge Value |
+| charges (included fields same with original_charges) | array | Charges |
+| optional_charges | object | Optinal Charges |
+| optional_charges[].rate_id | integer | Charge Id |
+| optional_charges[].apply_to_rate_id | integer | Id of rate in which will aplayed optinal charge |
+| optional_charges[].name, | string | Charge name |
+| optional_charges[].total_amount | float | Charge total amount |
+| id | integer | Rate Id |
+| vehicle_type_id | integer | Vehicle Type Id |
+| is_handicap_accessible | boolean | Is Handicap Accessible |
+#### *Create Quote*, *Booking*, *Update Booking* request parameters
+
+| Name | Type |Required | Description |
+|-----------------------------------------------|---------|---------|-------------------------------------------------------------------|
+| search_result_id | integer | Yes | Id of choosed price from Rate Lookup response |
+| search_id (For Quote) | integer | Yes | Returns from Rate Lookup response |
+| passengers | array | Yes | List of passengers (Minimum 1 passenger) |
+| passengers[].account_id | integer | No | Account Id of passenger |
+| passengers[].account_number | string | Yes | Account Number of passenger |
+| passengers[].first_name | string | Yes | Passenger first name |
+| passengers[].last_name | string | Yes | Passenger last name |
+| passengers[].company | string | No | Passenger company |
+| passengers[].phone | string | Yes | Passenger phone |
+| passengers[].email | string | Yes | Passenger email |
+| applied_optional_rates | array | No | Array of rates Id's |
+| misc_info | object | No | Miscellaneous Information |
+| misc_info.customer_notes | string | No | Some customer note |
+| misc_info.referral_source | string | No | Referral source |
+| misc_info.group_name | string | No | Group name |
+| misc_info.occasion | string | No | Occasion |
+| misc_info.reference_number | string | No | Referense number |
+| misc_info.is_greeting_sign_required | boolean | No | Is greeting signature required (Dafault value: `false`) |
+| pickup_flight_info | object | No | Pick Up flight information |
+| pickup_flight_info.airline_name | string | No | Airline Name |
+| pickup_flight_info.airline_code | string | No | Airline Code |
+| pickup_flight_info.flight_number | string | No | Flight Number |
+| dropoff_flight_info | object | No | Drop Off flight information |
+| return_trip_info | integer | No | Return Trip Information |
+| return_trip_info.search_result_id | integer | No | Id of choosed price from Rate Lookup response |
+| return_trip_info.passengers | array | No | List of passengers for return trip |
+| credit_card_info | object | No | Information of customer Credit Card |
+| credit_card_info.card_number | string | Yes* | Credit Card Number (Required if 'credit_card_id' is not provided) |
+| credit_card_info.card_holder_name | string | No | Credit Card Holder Name |
+| credit_card_info.billing_address | string | No | Credit Card Billing Address |
+| credit_card_info.billing_address.name | string | No | Name |
+| credit_card_info.billing_address.phone | string | No | Phone |
+| credit_card_info.billing_address.country_code | string | No | Country Code |
+| credit_card_info.billing_address.state_code | string | No | State Code |
+| credit_card_info.billing_address.postal_code | string | No | Postal/Zip Code |
+| credit_card_info.billing_address.county | string | No | Country |
+| credit_card_info.billing_address.city | string | No | City |
+| credit_card_info.billing_address.address_line1| string | No | Address Line 1 |
+| credit_card_info.billing_address.address_line2| string | No | Address Line 2 |
+| credit_card_info.billing_address.latitude | string | No | Latitude |
+| credit_card_info.billing_address.longitude | string | No | Longitude |
+| expires_at | object | Yes* | Credit Card Expiration Date (Required if 'credit_card_id' is not provided) |
+| payment_type_id | integer | Yes | Id of Payment Type |
+| credit_card_id | integer | Yes* | Credit Card Id (Required to use existing Credit Card) |
+
+
+#### *Booking*, *Update Booking* response parameters
+
+| Name |Type |Description |
+|-------------------------------|-------|---------------------------------------------------|
+| search_result_id |integer| Id of choosed price from Rate Lookup response |
+| passengers |array | List of passengers |
+| passengers[].account_id |integer| Account Id of passenger |
+| passengers[].account_number |string | Account Number of passenger |
+| passengers[].first_name |string | Passenger first name |
+In 'execution' console you can see request/response samples, data types and restriction sizes of parameters.
+
+
+<b> Errors </b>
+
+Any errors that may occur during the booking process basically use standard HTTP codes which are described in the <a href="https://jsapi.apiary.io/introduction/overview">Introduction</a> section of this documentation.
+However, special attention deserves the description of the response code 409 (Conflict).
+API returns this code in case of correct requests, but violation of business logic, non-compliance with the settings, booking process restrictions which set by settings etc.
+We use 'reason_phrase' in response for to provide information about case of conflict
+So table below describe reason phrases that can occurs during Booking process and returning code 409:
+
+| Response reason phrase |Description |
+|--------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| "Search Result Conflict" | Specified `search_result_id` is missing or expired |
+| "Reservation Missing Conflict" | Could not find reservation associated with this request. |
+| "Updating Limit Conflict" | Reservation cannot be updated, because it isn't allowed by company settings. |
+| "PU time Conflict" | Reservation cannot be modified or cancelled because of PU time restricted by settings |
+| "Cut Off Limit Conflict" | Reservation cannot be cancelled or modified during cut off time. |
+| "Creation Limit Conflict" | Reservation cannot be created, because it isn't allowed by company settings. |
+| "Return trip cannot be specified during reservation modification " | Attemt to create return reservation during update existing |
+
+
+
+## Rate Lookup [/Rate Lookup]
+`Rate Lookup` method allows to see set of pricing accordance with your requirement and wishes. <br/> Returns responce with collection of charges. <br/> `Get Rate Details` method method allows to see detailed list of charges by `search_id` from previous method.
+
+### Rate Lookup [POST /companies/{company_alias}/rate_lookup]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `billing_contact_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passenger_id` (int) Range: inclusive between 1 and 2147483647.
+    + `service_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passenger_count` (int) Range: inclusive between 1 and 2147483647.
+    + `luggage_count` (int) Range: inclusive between 0 and 2147483647.
+    + `infant_child_seat_count` (int) Range: inclusive between 0 and 2147483647.
+    + `booster_child_seat_count` (int) Range: inclusive between 0 and 2147483647.
+    + `toddler_child_seat_count` (int) Range: inclusive between 0 and 2147483647.
+    + `is_handicap_access_required` (boolean)
+    + `vehicle_types` (array)
+    + `promotion_code` (string) String length: inclusive between 0 and 50.
+    + `scheduled_pickup_at` (object)
+    + `duration` (int) Range: inclusive between 60 and 2147483647.
+    + `distance` (object) Non-negative.
+    + `pickup` (object) Required.
+    + `pickup.type` (object)
+    + `pickup.scheduled_arriving_at` (object)
+    + `pickup.instructions` (string) String length: inclusive between 0 and 500.
+    + `pickup.address` (object) Required.
+    + `pickup.address.name` (string) String length: inclusive between 0 and 500.
+    + `pickup.address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `pickup.address.country_code` (string) String length: inclusive between 0 and 5.
+    + `pickup.address.state_code` (string) String length: inclusive between 0 and 5.
+    + `pickup.address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `pickup.address.county` (string) String length: inclusive between 0 and 250.
+    + `pickup.address.city` (string) String length: inclusive between 0 and 250.
+    + `pickup.address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `pickup.address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `pickup.address.latitude` (float)
+    + `pickup.address.longitude` (float)
+    + `flight` (object)
+    + `flight.airport_code` (string) Required. Max length: 3. Min length: 3.
+    + `flight.airport_terminal` (string) String length: inclusive between 0 and 50.
+    + `flight.airline_name` (string) String length: inclusive between 0 and 250.
+    + `flight.airline_code` (string) Max length: 2. Min length: 2.
+    + `flight.flight_number` (string) Max length: 4. Min length: 1.
+    + `flight.tail_number` (string) String length: inclusive between 0 and 10.
+    + `flight.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `flight.departing_or_arriving_at` (object)
+    + `cruise` (object)
+    + `cruise.seaport_code` (string) Required. String length: inclusive between 0 and 10.
+    + `cruise.cruise_ship_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.cruiseline_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_or_arriving_at` (object)
+    + `stops` (array)
+    + `stops[].type` (object)
+    + `stops[].scheduled_arriving_at` (object)
+    + `stops[].instructions` (string) String length: inclusive between 0 and 500.
+    + `stops[].address` (object) Required.
+    + `stops[].address.name` (string) String length: inclusive between 0 and 500.
+    + `stops[].address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `stops[].address.country_code` (string) String length: inclusive between 0 and 5.
+    + `stops[].address.state_code` (string) String length: inclusive between 0 and 5.
+    + `stops[].address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `stops[].address.county` (string) String length: inclusive between 0 and 250.
+    + `stops[].address.city` (string) String length: inclusive between 0 and 250.
+    + `stops[].address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `stops[].address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `stops[].address.latitude` (float)
+    + `stops[].address.longitude` (float)
+    + `flight` (object)
+    + `flight.airport_code` (string) Required. Max length: 3. Min length: 3.
+    + `flight.airport_terminal` (string) String length: inclusive between 0 and 50.
+    + `flight.airline_name` (string) String length: inclusive between 0 and 250.
+    + `flight.airline_code` (string) Max length: 2. Min length: 2.
+    + `flight.flight_number` (string) Max length: 4. Min length: 1.
+    + `flight.tail_number` (string) String length: inclusive between 0 and 10.
+    + `flight.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `flight.departing_or_arriving_at` (object)
+    + `cruise` (object)
+    + `cruise.seaport_code` (string) Required. String length: inclusive between 0 and 10.
+    + `cruise.cruise_ship_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.cruiseline_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_or_arriving_at` (object)
+    + `dropoff` (object)
+    + `dropoff.type` (object)
+    + `dropoff.scheduled_arriving_at` (object)
+    + `dropoff.instructions` (string) String length: inclusive between 0 and 500.
+    + `dropoff.address` (object) Required.
+    + `dropoff.address.name` (string) String length: inclusive between 0 and 500.
+    + `dropoff.address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `dropoff.address.country_code` (string) String length: inclusive between 0 and 5.
+    + `dropoff.address.state_code` (string) String length: inclusive between 0 and 5.
+    + `dropoff.address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `dropoff.address.county` (string) String length: inclusive between 0 and 250.
+    + `dropoff.address.city` (string) String length: inclusive between 0 and 250.
+    + `dropoff.address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `dropoff.address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `dropoff.address.latitude` (float)
+    + `dropoff.address.longitude` (float)
+    + `flight` (object)
+    + `flight.airport_code` (string) Required. Max length: 3. Min length: 3.
+    + `flight.airport_terminal` (string) String length: inclusive between 0 and 50.
+    + `flight.airline_name` (string) String length: inclusive between 0 and 250.
+    + `flight.airline_code` (string) Max length: 2. Min length: 2.
+    + `flight.flight_number` (string) Max length: 4. Min length: 1.
+    + `flight.tail_number` (string) String length: inclusive between 0 and 10.
+    + `flight.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `flight.departing_or_arriving_at` (object)
+    + `cruise` (object)
+    + `cruise.seaport_code` (string) Required. String length: inclusive between 0 and 10.
+    + `cruise.cruise_ship_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.cruiseline_name` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_to_or_arriving_from` (string) String length: inclusive between 0 and 250.
+    + `cruise.departing_or_arriving_at` (object)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "billing_contact_id": 111, "passenger_id": 222, "service_type_id": 10, "passenger_count": 3, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 2, "is_handicap_access_required": true, "vehicle_types": [ 11, 12, 13 ], "promotion_code": "Promo", "scheduled_pickup_at": "2015-10-31T01:19:10+02:00", "duration": 150, "distance": 33.33, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "search_id": 1, "service_type_id": 11, "rental_agreement_id": 22, "results": [ { "id": 123456, "vehicle_type_id": 11, "vehicle_type_name": "SEDAN", "vehicle_type_description": "Some description of vehicle type", "vehicle_type_images": [ "https://test_path/vehicle_image.png", "https://test_path_2/vehicle_image.png" ], "passenger_capacity": 3, "luggage_capacity": 5, "is_handicap_accessible": true, "has_optional_charges": true, "original_total_amount": 33.33, "total_amount": 44.44 }, { "id": 234567, "vehicle_type_id": 12, "vehicle_type_name": "BUS", "vehicle_type_description": "Some description of vehicle type", "vehicle_type_images": [ "https://test_path_3/vehicle_image.png", "https://test_path_4/vehicle_image.png" ], "passenger_capacity": 7, "luggage_capacity": 10, "is_handicap_accessible": true, "has_optional_charges": true, "original_total_amount": 55.555, "total_amount": 66.66 } ] }
+
+
+### Get Rate Details [GET /companies/{company_alias}/rate_lookup/results/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "original_charges": [ { "rate_id": 11, "group": "base_rate", "name": "Base Rate", "details": { "type": "fixed", "unit_value": 10.0, "unit_count": 1.0, "is_vat_tax": true }, "value": 10.0 }, { "rate_id": 12, "group": "discount1", "name": "Discount", "details": { "type": "multiplier", "unit_value": 3.0, "unit_count": 2.0, "is_vat_tax": true }, "value": 6.0 } ], "charges": [ { "rate_id": 11, "group": "base_rate", "name": "Base Rate", "details": { "type": "fixed", "unit_value": 12.0, "unit_count": 1.0, "is_vat_tax": true }, "value": 12.0 }, { "rate_id": 2, "group": "discount1", "name": "Discount", "details": { "type": "multiplier", "unit_value": 3.0, "unit_count": 2.0, "is_vat_tax": true }, "value": 9.0 } ], "optional_charges": [ { "rate_id": 1, "apply_to_rate_id": 11, "name": "Misc_1", "total_amount": 2.0 }, { "rate_id": 2, "apply_to_rate_id": 12, "name": "Misc_2", "total_amount": 3.0 } ], "id": 0, "vehicle_type_id": 0, "is_handicap_accessible": false }
+
+
+## Quote [/Quote]
+
+### Create Quote [POST /companies/{company_alias}/quotes]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `search_id` (int) Range: inclusive between 1 and 9.22337203685478E+18.
+    + `vehicle_types` (array)
+    + `passengers` (array)
+    + `passengers[].account_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passengers[].account_number` (string) String length: inclusive between 0 and 50.
+    + `passengers[].first_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].last_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].company` (string) String length: inclusive between 0 and 50.
+    + `passengers[].phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `passengers[].email` (string) Email address. String length: inclusive between 0 and 255.
+    + `misc_info` (object)
+    + `misc_info.customer_notes` (string) String length: inclusive between 0 and 500.
+    + `misc_info.referral_source` (string) String length: inclusive between 0 and 50.
+    + `misc_info.group_name` (string) String length: inclusive between 0 and 50.
+    + `misc_info.occasion` (string) String length: inclusive between 0 and 50.
+    + `misc_info.reference_number` (string) String length: inclusive between 0 and 50.
+    + `misc_info.is_greeting_sign_required` (boolean)
+    + `pickup_flight_info` (object)
+    + `pickup_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `pickup_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `pickup_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `dropoff_flight_info` (object)
+    + `dropoff_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `dropoff_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `dropoff_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `credit_card_info` (object)
+    + `credit_card_info.card_number` (string) Required. String length: inclusive between 0 and 20.
+    + `credit_card_info.card_holder_name` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address` (object)
+    + `credit_card_info.billing_address.name` (string) String length: inclusive between 0 and 500.
+    + `credit_card_info.billing_address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `credit_card_info.billing_address.country_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.state_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `credit_card_info.billing_address.county` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.city` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.latitude` (float)
+    + `credit_card_info.billing_address.longitude` (float)
+    + `expires_at` (object)
+    + `payment_type_id` (int)
+    + `credit_card_id` (int)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "search_id": 111, "vehicle_types": [ 1, 2 ], "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-06-30T17:19:10+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 111, "confirmation_number": "12345" }
+
+
+## Booking [/Booking]
+`Booking` creates reservation using specified booking information and specified rate lookup information (`search_result_id`) which was accepted previously. <br/> `Update Booking` update reservation by reservation Id using specified booking information and specified rate lookup information which was accepted previously.
+
+### Booking [POST /companies/{company_alias}/bookings]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `search_result_id` (int) Range: inclusive between 1 and 9.22337203685478E+18.
+    + `passengers` (array)
+    + `passengers[].account_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passengers[].account_number` (string) String length: inclusive between 0 and 50.
+    + `passengers[].first_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].last_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].company` (string) String length: inclusive between 0 and 50.
+    + `passengers[].phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `passengers[].email` (string) Email address. String length: inclusive between 0 and 255.
+    + `applied_optional_rates` (array)
+    + `misc_info` (object)
+    + `misc_info.customer_notes` (string) String length: inclusive between 0 and 500.
+    + `misc_info.referral_source` (string) String length: inclusive between 0 and 50.
+    + `misc_info.group_name` (string) String length: inclusive between 0 and 50.
+    + `misc_info.occasion` (string) String length: inclusive between 0 and 50.
+    + `misc_info.reference_number` (string) String length: inclusive between 0 and 50.
+    + `misc_info.is_greeting_sign_required` (boolean)
+    + `pickup_flight_info` (object)
+    + `pickup_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `pickup_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `pickup_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `dropoff_flight_info` (object)
+    + `dropoff_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `dropoff_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `dropoff_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `return_trip_info` (object)
+    + `return_trip_info.search_result_id` (int) Range: inclusive between 1 and 9.22337203685478E+18.
+    + `return_trip_info.passengers` (array)
+    + `passengers[].account_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passengers[].account_number` (string) String length: inclusive between 0 and 50.
+    + `passengers[].first_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].last_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].company` (string) String length: inclusive between 0 and 50.
+    + `passengers[].phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `passengers[].email` (string) Email address. String length: inclusive between 0 and 255.
+    + `applied_optional_rates` (array)
+    + `pickup_flight_info` (object)
+    + `pickup_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `pickup_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `pickup_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `dropoff_flight_info` (object)
+    + `dropoff_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `dropoff_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `dropoff_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `credit_card_info` (object)
+    + `credit_card_info.card_number` (string) Required. String length: inclusive between 0 and 20.
+    + `credit_card_info.card_holder_name` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address` (object)
+    + `credit_card_info.billing_address.name` (string) String length: inclusive between 0 and 500.
+    + `credit_card_info.billing_address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `credit_card_info.billing_address.country_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.state_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `credit_card_info.billing_address.county` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.city` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.latitude` (float)
+    + `credit_card_info.billing_address.longitude` (float)
+    + `expires_at` (object)
+    + `payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-06-30T17:19:10+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 111, "confirmation_number": "12345" }
+
+
+### Update Booking [PUT /companies/{company_alias}/bookings/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + `search_result_id` (int) Range: inclusive between 1 and 9.22337203685478E+18.
+    + `passengers` (array)
+    + `passengers[].account_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passengers[].account_number` (string) String length: inclusive between 0 and 50.
+    + `passengers[].first_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].last_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].company` (string) String length: inclusive between 0 and 50.
+    + `passengers[].phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `passengers[].email` (string) Email address. String length: inclusive between 0 and 255.
+    + `applied_optional_rates` (array)
+    + `misc_info` (object)
+    + `misc_info.customer_notes` (string) String length: inclusive between 0 and 500.
+    + `misc_info.referral_source` (string) String length: inclusive between 0 and 50.
+    + `misc_info.group_name` (string) String length: inclusive between 0 and 50.
+    + `misc_info.occasion` (string) String length: inclusive between 0 and 50.
+    + `misc_info.reference_number` (string) String length: inclusive between 0 and 50.
+    + `misc_info.is_greeting_sign_required` (boolean)
+    + `pickup_flight_info` (object)
+    + `pickup_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `pickup_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `pickup_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `dropoff_flight_info` (object)
+    + `dropoff_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `dropoff_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `dropoff_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `return_trip_info` (object)
+    + `return_trip_info.search_result_id` (int) Range: inclusive between 1 and 9.22337203685478E+18.
+    + `return_trip_info.passengers` (array)
+    + `passengers[].account_id` (int) Range: inclusive between 1 and 2147483647.
+    + `passengers[].account_number` (string) String length: inclusive between 0 and 50.
+    + `passengers[].first_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].last_name` (string) String length: inclusive between 0 and 50.
+    + `passengers[].company` (string) String length: inclusive between 0 and 50.
+    + `passengers[].phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `passengers[].email` (string) Email address. String length: inclusive between 0 and 255.
+    + `applied_optional_rates` (array)
+    + `pickup_flight_info` (object)
+    + `pickup_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `pickup_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `pickup_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `dropoff_flight_info` (object)
+    + `dropoff_flight_info.airline_name` (string) String length: inclusive between 0 and 250.
+    + `dropoff_flight_info.airline_code` (string) Max length: 2. Min length: 2.
+    + `dropoff_flight_info.flight_number` (string) Max length: 4. Min length: 1.
+    + `credit_card_info` (object)
+    + `credit_card_info.card_number` (string) Required. String length: inclusive between 0 and 20.
+    + `credit_card_info.card_holder_name` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address` (object)
+    + `credit_card_info.billing_address.name` (string) String length: inclusive between 0 and 500.
+    + `credit_card_info.billing_address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `credit_card_info.billing_address.country_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.state_code` (string) String length: inclusive between 0 and 5.
+    + `credit_card_info.billing_address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `credit_card_info.billing_address.county` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.city` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `credit_card_info.billing_address.latitude` (float)
+    + `credit_card_info.billing_address.longitude` (float)
+    + `expires_at` (object)
+    + `payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-06-30T17:19:10+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
+
+
+## Group Company UI Preferences
+Provides operations for Company UI Preferences.
+
+
+## Get [/Get]
+Returns Company UI preference by Company Alias Id.
+
+### Get [GET /companies/{company_alias}/preferences/ui]
+
++ Parameters
+    + company_alias: ( )
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "ores": { "default_date_format": "sample string 1", "default_time_format": "sample string 2", "default_date_time_format": "sample string 1 sample string 2", "is_quote_creation_enabled_if_rates_not_found": true, "location_type_display_order": [ "sample string 1", "sample string 2" ], "rate_lookup_display_type": "row", "message_on_missing_rate_result_for_return_trip": "sample string 4", "message_on_reservation_auto_approve_enabled": "sample string 5", "message_on_reservation_auto_approve_disabled": "sample string 6", "message_on_credit_card_required": "sample string 7", "message_on_reservation_cut_off_enabled": "sample string 8", "message_on_ores_disabled": "sample string 9", "is_rate_grouping_allowed": true, "is_airport_instructions_visible": true, "is_flight_details_visible_on_drop_off": true, "is_child_seats_visible": true, "is_promotion_code_visible": true, "design": { "primary_button_style": { "background_color": { "from_color": "sample string 1", "to_color": "sample string 2" }, "border_color": "sample string 1", "text_color": "sample string 2" }, "accent_button_style": { "background_color": { "from_color": "sample string 1", "to_color": "sample string 2" }, "border_color": "sample string 1", "text_color": "sample string 2" }, "warning_button_style": { "background_color": { "from_color": "sample string 1", "to_color": "sample string 2" }, "border_color": "sample string 1", "text_color": "sample string 2" }, "default_input_style": { "button_color": { "from_color": "sample string 1", "to_color": "sample string 2" }, "border_color": "sample string 1", "placeholder_text_color": "sample string 2" }, "top_menu_background_color": "sample string 1", "top_menu_border_color": "sample string 2", "step_wizard_bar_background_color": "sample string 3", "dash_line_color": "sample string 4", "dashboard_menu_text_color": "sample string 5", "text_color": "sample string 6", "background_color": "sample string 7" } }, "ores_mobile": { "logotype_file_name": "sample string 1", "logotype_image": "http://webapihelppage2.com", "background_color": "sample string 3", "theme_color": "sample string 4", "attention_color": "sample string 5", "text_color": "sample string 6", "background_images_file_names": [ "sample string 1", "sample string 2" ], "background_images": [ "http://webapihelppage1.com", "http://webapihelppage2.com" ] } }
+
+
+## Group Country
+Provides read operation for Country resources.
+
+
+## Collection [/Collection]
+Returns company Countries.
+
+### Get Collection [GET /countries?search={search}]
+
++ Parameters
+    + search: ( string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "country_name": "sample string 1", "country_alpha2_code": "sample string 2", "country_alpha3_code": "sample string 3", "country_numeric3_code": "sample string 4" }, { "country_name": "sample string 1", "country_alpha2_code": "sample string 2", "country_alpha3_code": "sample string 3", "country_numeric3_code": "sample string 4" } ]
+
+
+## Group Customer Self Booking Contact
+Provides operations for view Account Booking contact(s).
+
+
+## Get [/Get]
+Returns Customer Self Booking contact by ID.
+
+### Get [GET /customers/self/booking_contacts/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+## Collection [/Collection]
+Returns Paged Collection of Customer Self Booking contacts.
+
+### Get Collection [GET /customers/self/booking_contacts?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + is_active: true ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 } ] }
+
+
+## Group Customer Self Account
+Provides viewing and editing of the Account information. <br/> Update Password: It allows to update the password for account <br/> Update Email: It allows to update the email for account <br/> Update: Full account update <br/> Update partially: Partially account update <br/>
+
+
+## Update [/Update]
+
+### Update Password [PUT /customers/self/password]
+
++ Parameters
+
++ Request
+
+    + `new_password` (string) Required. String length: inclusive between 3 and 50.
+    + `current_password` (string) Required. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "new_password": "Test@2015!^UD", "current_password": "Test@2014!^UD" }
+
+
+### Update Email [PUT /customers/self/email]
+
++ Parameters
+
++ Request
+
+    + `new_email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `current_password` (string) Required. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "new_email": "test_2@gmail.com", "current_password": "test_1@gmail.com" }
+
+Provides operation of full and partially update Customer Self Account.
+
+### Update [PUT /customers/self]
+
++ Parameters
+
++ Request
+
+    + `prefix` (string) String length: inclusive between 0 and 50.
+    + `first_name` (string) Required. String length: inclusive between 0 and 50.
+    + `last_name` (string) Required. String length: inclusive between 0 and 50.
+    + `position` (string) String length: inclusive between 0 and 50.
+    + `department` (string) String length: inclusive between 0 and 50.
+    + `company` (string) String length: inclusive between 0 and 50.
+    + `address` (object)
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `emails` (array)
+    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `emails[].type` (object)
+    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "company": "Limo Anywhere", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ] }
+
+
+### Update partially [PATCH /customers/self]
+
++ Parameters
+
++ Request
+
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            An exception has occurred while using the formatter 'JsonTextMediaTypeFormatter' to generate sample for media type 'application/json'. Exception message: An object of type 'PageDTO`1' cannot be used with a type parameter of 'Delta`1'. Parameter name: value
+
+
+## Get [/Get]
+Return Customer Self Account information.
+
+### Get [GET /customers/self]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "parent_id": 1, "email": "test@test.com", "number": "1234567890", "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "company": "Limo Anywhere", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ] }
+
+
+## Group Poi Type
+Provides read operations of POI types
+
+
+## Collection [/Collection]
+Returns paged collection of POI types.
+
+### Get Collection [GET /companies/{company_alias}/pois/types?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "name": "sample string 1", "is_active": true }, { "name": "sample string 1", "is_active": true } ] }
+
+
+## Group Payment Type
+Provides operations for Payment Type resources.
+
+
+## Collection [/Collection]
+Returns Payment Types collection.
+
+### Get Collection [GET /companies/{company_alias}/payment_types?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "is_system": true, "code": "sample string 3", "name": "sample string 4", "type": "other", "is_active": true }, { "id": 1, "is_system": true, "code": "sample string 3", "name": "sample string 4", "type": "other", "is_active": true } ]
+
+
+## Get [/Get]
+Returns Payment Type by Id
+
+### Get [GET /companies/{company_alias}/payment_types/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "is_system": true, "code": "sample string 3", "name": "sample string 4", "type": "other", "is_active": true }
+
+Returns Payment Type by code
+
+### Get by Payment Type Code [GET /companies/{company_alias}/payment_types?code={code}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + code: (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "is_system": true, "code": "sample string 3", "name": "sample string 4", "type": "other", "is_active": true }
+
+
+## Group Customer Self Reservation
+Provides viewing of account's reservation.
+
+
+## Get [/Get]
+Returns Customer Self detailed reservation info
+
+### Get [GET /customers/self/reservations/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "actual_pickup_at": "2015-10-30T18:34:10+02:00", "scheduled_on_spot_at": "2015-10-30T18:49:10+02:00", "actual_on_spot_at": "2015-10-30T19:04:10+02:00", "dropoff_at": "2015-10-30T19:19:10+02:00", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "booking_contact": { "account_id": 1, "account_number": "54321", "first_name": "Jared", "last_name": "Clayton", "company": "Limo Anywhere", "phone": "+1-234-2222222", "email": "test_2@test.com" }, "passengers": [ { "account_id": 1, "account_number": "98765", "first_name": "Harlan", "last_name": "Gareth", "company": "Limo Anywhere", "phone": "+1-234-3333333", "email": "test_3@test.com" } ], "passengers_count": 2, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 0, "is_handicap_access_required": false, "promotion_code": "Promo", "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "charges": [ { "rate_id": 11, "group": "base_rate", "name": "Base Rate", "details": { "type": "fixed", "unit_value": 12.0, "unit_count": 1.0, "is_vat_tax": true }, "value": 12.0 }, { "rate_id": 2, "group": "discount1", "name": "Discount", "details": { "type": "multiplier", "unit_value": 3.0, "unit_count": 2.0, "is_vat_tax": true }, "value": 9.0 } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "rental_agreement_id": 1, "notes": "Some additional information about reservation", "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "vehicle_type_id": 1, "scheduled_pickup_at": "2015-10-30T20:19:10+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "credit_card_id": 111, "credit_card_network": "other", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+
+
+## Collections [/Collections]
+Returns Customer Self reservation collection
+
+### Get Collection [GET /customers/self/reservations?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&invoice_id={invoice_id}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + from: ( object)
+    + to: ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + passenger_id: ( object)
+    + is_paid: ( object)
+    + invoice_id: ( object)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "vehicle_type_id": 1, "scheduled_pickup_at": "2015-10-30T20:19:10+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "credit_card_id": 111, "credit_card_network": "other", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+
+
+### Get 'Upcoming' Collection [GET /customers/self/reservations/upcoming?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + from: ( object)
+    + to: ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + passenger_id: ( object)
+    + is_paid: ( object)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "vehicle_type_id": 1, "scheduled_pickup_at": "2015-10-30T20:19:10+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "credit_card_id": 111, "credit_card_network": "other", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+
+
+### Get 'Completed' Collection [GET /customers/self/reservations/completed?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + from: ( object)
+    + to: ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + passenger_id: ( object)
+    + is_paid: ( object)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "vehicle_type_id": 1, "scheduled_pickup_at": "2015-10-30T20:19:10+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "credit_card_id": 111, "credit_card_network": "other", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+
+
+### Get 'In Progress' Collection [GET /customers/self/reservations/in_progress?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + from: ( object)
+    + to: ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + passenger_id: ( object)
+    + is_paid: ( object)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "vehicle_type_id": 1, "scheduled_pickup_at": "2015-10-30T20:19:10+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 0.0, "longitude": 0.0 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "credit_card_id": 111, "credit_card_network": "other", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+
+
+## Cancell [/Cancell]
+Cancels reservation by specified ID.
+
+### Cancell [POST /customers/self/reservations/{id}/cancel]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "transitions": [ { "statuses": [ { "id": 1, "name": "sample string 2", "color": "sample string 3" }, { "id": 1, "name": "sample string 2", "color": "sample string 3" } ] }, { "statuses": [ { "id": 1, "name": "sample string 2", "color": "sample string 3" }, { "id": 1, "name": "sample string 2", "color": "sample string 3" } ] } ] }
+
+
+## Get Permitted Transactions [/Get Permitted Transactions]
+Returns collection of available triggers for reservation by specified ID.
+
+### Get Permitted Transactions [GET /customers/self/reservations/{id}/transitions]
+
++ Parameters
+    + id: `1` (required, int)
+    + include_statuses: ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+## Additional [/Additional]
+
+### Get Reservation Driver Info [GET /customers/self/reservations/{id}/driver]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "first_name": "Felix", "last_name": "Kareem", "portrait": "https://some_path/portrait.png", "cellular_phone": "+1-234-1111111", "car": { "car_make": "Bavaria Motor", "model": "BMW X5", "color_name": "Black", "license_plate": "0A B1234" } }
+
+
+### Get Reservation Driver GPS [GET /customers/self/reservations/{id}/driver/gps]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "latitude": 1.1, "longitude": 2.1 }
+
+
+## Group Seaport
+Provides read operations for Seaport(s)
+
+
+## Collection [/Collection]
+Returns paged collection of Seaports.
+
+### Get Collection [GET /companies/{company_alias}/seaports?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "name": "sample string 2", "code": "sample string 3", "state": 1, "local": "sample string 4", "status": "sample string 5", "latitude": 6.1, "longitude": 7.1 }, { "id": 1, "name": "sample string 2", "code": "sample string 3", "state": 1, "local": "sample string 4", "status": "sample string 5", "latitude": 6.1, "longitude": 7.1 } ] }
+
+
+## Group Config
+Provides operations for Configuration resource.
+
+
+## Get [/Get]
+Returns configuration for company with specified ID.
+
+### Get [GET /companies/{company_alias}/config]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "main": { "time_zone_offset": "00:00:00.1234567", "time_zone_code": "sample string 2", "date_format_code": "sample string 3", "time_format_code": "sample string 4", "currency_code": "sample string 5", "date_format": "sample string 6", "time_format": "sample string 7", "date_time_format": "sample string 6 sample string 7", "distance_units": "miles" }, "reservation": { "new_reservation_button_options": [], "apply_distance_rates_to_service_types": [ 1, 2 ], "apply_hourly_rates_to_service_types": [ 1, 2 ], "apply_passenger_rates_to_service_types": [ 1, 2 ], "apply_stop_rates_to_service_types": [ 1, 2 ], "default_rental_agreement_id": 1, "is_auto_offer_to_driver_enabled": true }, "information": { "company_alias": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "city": "sample string 6", "address_line1": "sample string 7", "address_line2": "sample string 8", "business_number": "sample string 9", "is_business_number_visible": true, "phone1": "sample string 11", "phone2": "sample string 12", "fax": "sample string 13", "general_email": "sample string 14", "reservation_email": "sample string 15", "billing_email": "sample string 16", "quote_email": "sample string 17", "website_url": "sample string 18", "logo_image_url": "sample string 19", "company_modules": [ "sample string 1", "sample string 2" ] }, "notification": { "primary_contact_email": "sample string 1", "primary_contact_phone": "sample string 2", "primary_contact_wireless_provider": "sample string 3", "secondary_contact_email": "sample string 4", "secondary_contact_phone": "sample string 5", "secondary_contact_wireless_provider": "sample string 6", "send_on_trip_processing_to_primary_contact": true, "send_on_trip_processing_to_secondary_contact": true, "send_on_quote_create_to_primary_contact": true, "send_on_quote_create_to_secondary_contact": true }, "confirmation": { "use_custom_mapping": true, "mapped_standart_confirmation": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_cancellation_confirmation": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_reservation_receipt": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_payment_receipt": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_customer_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_driver_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_greeting_sign": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_affiliate_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_invoice": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "send_copies_to_reservation_email": true, "send_on_payment_create_to_customer": true, "send_on_trip_create_to_customer": true, "send_on_trip_update_to_customer": true, "send_on_trip_processing_to_booking_contact": true, "attach_pdf": true }, "distance_calculation": { "route_optimize_by": "distance", "road_type_to_avoid": "not_selected" } }
+
+
+## Update [/Update]
+Updates configuration for company with specified ID.
+
+### Update [PUT /companies/{company_alias}/config]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `main` (object) Required.
+    + `main.time_zone_offset` (object)
+    + `main.time_zone_code` (string) String length: inclusive between 0 and 20.
+    + `main.date_format_code` (string) Required. String length: inclusive between 0 and 50.
+    + `main.time_format_code` (string) Required. String length: inclusive between 0 and 50.
+    + `main.currency_code` (string) String length: inclusive between 0 and 3.
+    + `main.date_format` (string) String length: inclusive between 0 and 50.
+    + `main.time_format` (string) String length: inclusive between 0 and 50.
+    + `main.date_time_format` (string)
+    + `main.distance_units` (object)
+    + `reservation` (object) Required.
+    + `reservation.default_status_code` (object) Required.
+    + `reservation.default_status_code.value` (string)
+    + `new_reservation_button_options` (object)
+    + `apply_distance_rates_to_service_types` (array)
+    + `apply_hourly_rates_to_service_types` (array)
+    + `apply_passenger_rates_to_service_types` (array)
+    + `apply_stop_rates_to_service_types` (array)
+    + `default_rental_agreement_id` (int) Range: inclusive between 1 and 2147483647.
+    + `is_auto_offer_to_driver_enabled` (boolean) Required.
+    + `information` (object) Required.
+    + `information.company_alias` (string) Required. String length: inclusive between 0 and 50.
+    + `information.name` (string) Required. String length: inclusive between 0 and 250.
+    + `information.country_code` (string) String length: inclusive between 0 and 20.
+    + `information.state_code` (string) String length: inclusive between 0 and 20.
+    + `information.postal_code` (string) String length: inclusive between 0 and 20.
+    + `information.city` (string) String length: inclusive between 0 and 250.
+    + `information.address_line1` (string) String length: inclusive between 0 and 250.
+    + `information.address_line2` (string) String length: inclusive between 0 and 250.
+    + `information.business_number` (string)
+    + `information.is_business_number_visible` (boolean)
+    + `information.phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `information.phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `information.fax` (string) Phone number. String length: inclusive between 0 and 50.
+    + `information.general_email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `information.reservation_email` (string) Email address. String length: inclusive between 0 and 255.
+    + `information.billing_email` (string) Email address. String length: inclusive between 0 and 255.
+    + `information.quote_email` (string) Email address. String length: inclusive between 0 and 255.
+    + `information.website_url` (string) String length: inclusive between 0 and 255.
+    + `information.logo_image_url` (string) String length: inclusive between 0 and 255.
+    + `information.company_modules` (array)
+    + `notification` (object) Required.
+    + `notification.primary_contact_email` (string) Email address. String length: inclusive between 0 and 255.
+    + `notification.primary_contact_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `notification.primary_contact_wireless_provider` (string) String length: inclusive between 0 and 255.
+    + `notification.secondary_contact_email` (string) Email address. String length: inclusive between 0 and 255.
+    + `notification.secondary_contact_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `notification.secondary_contact_wireless_provider` (string) String length: inclusive between 0 and 255.
+    + `notification.send_on_trip_processing_to_primary_contact` (boolean)
+    + `notification.send_on_trip_processing_to_secondary_contact` (boolean)
+    + `notification.send_on_quote_create_to_primary_contact` (boolean)
+    + `notification.send_on_quote_create_to_secondary_contact` (boolean)
+    + `confirmation` (object) Required.
+    + `confirmation.use_custom_mapping` (boolean)
+    + `confirmation.mapped_standart_confirmation` (object)
+    + `confirmation.mapped_standart_confirmation.form_type` (object)
+    + `confirmation.mapped_standart_confirmation.custom_form_type` (object)
+    + `confirmation.mapped_standart_confirmation.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_cancellation_confirmation` (object)
+    + `mapped_cancellation_confirmation.form_type` (object)
+    + `mapped_cancellation_confirmation.custom_form_type` (object)
+    + `mapped_cancellation_confirmation.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_reservation_receipt` (object)
+    + `mapped_reservation_receipt.form_type` (object)
+    + `mapped_reservation_receipt.custom_form_type` (object)
+    + `mapped_reservation_receipt.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_payment_receipt` (object)
+    + `mapped_payment_receipt.form_type` (object)
+    + `mapped_payment_receipt.custom_form_type` (object)
+    + `mapped_payment_receipt.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_customer_trip_sheet` (object)
+    + `mapped_customer_trip_sheet.form_type` (object)
+    + `mapped_customer_trip_sheet.custom_form_type` (object)
+    + `mapped_customer_trip_sheet.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_driver_trip_sheet` (object)
+    + `mapped_driver_trip_sheet.form_type` (object)
+    + `mapped_driver_trip_sheet.custom_form_type` (object)
+    + `mapped_driver_trip_sheet.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_greeting_sign` (object)
+    + `mapped_greeting_sign.form_type` (object)
+    + `mapped_greeting_sign.custom_form_type` (object)
+    + `mapped_greeting_sign.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_affiliate_trip_sheet` (object)
+    + `mapped_affiliate_trip_sheet.form_type` (object)
+    + `mapped_affiliate_trip_sheet.custom_form_type` (object)
+    + `mapped_affiliate_trip_sheet.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `mapped_invoice` (object)
+    + `mapped_invoice.form_type` (object)
+    + `mapped_invoice.custom_form_type` (object)
+    + `mapped_invoice.custom_form_id` (int) Range: inclusive between 1 and 2147483647.
+    + `send_copies_to_reservation_email` (boolean)
+    + `send_on_payment_create_to_customer` (boolean)
+    + `send_on_trip_create_to_customer` (boolean)
+    + `send_on_trip_update_to_customer` (boolean)
+    + `send_on_trip_processing_to_booking_contact` (boolean)
+    + `attach_pdf` (boolean)
+    + `distance_calculation` (object) Required.
+    + `distance_calculation.route_optimize_by` (object)
+    + `distance_calculation.road_type_to_avoid` (object)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "main": { "time_zone_offset": "00:00:00.1234567", "time_zone_code": "sample string 2", "date_format_code": "sample string 3", "time_format_code": "sample string 4", "currency_code": "sample string 5", "date_format": "sample string 6", "time_format": "sample string 7", "date_time_format": "sample string 6 sample string 7", "distance_units": "miles" }, "reservation": { "new_reservation_button_options": [], "apply_distance_rates_to_service_types": [ 1, 2 ], "apply_hourly_rates_to_service_types": [ 1, 2 ], "apply_passenger_rates_to_service_types": [ 1, 2 ], "apply_stop_rates_to_service_types": [ 1, 2 ], "default_rental_agreement_id": 1, "is_auto_offer_to_driver_enabled": true }, "information": { "company_alias": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "city": "sample string 6", "address_line1": "sample string 7", "address_line2": "sample string 8", "business_number": "sample string 9", "is_business_number_visible": true, "phone1": "sample string 11", "phone2": "sample string 12", "fax": "sample string 13", "general_email": "sample string 14", "reservation_email": "sample string 15", "billing_email": "sample string 16", "quote_email": "sample string 17", "website_url": "sample string 18", "logo_image_url": "sample string 19", "company_modules": [ "sample string 1", "sample string 2" ] }, "notification": { "primary_contact_email": "sample string 1", "primary_contact_phone": "sample string 2", "primary_contact_wireless_provider": "sample string 3", "secondary_contact_email": "sample string 4", "secondary_contact_phone": "sample string 5", "secondary_contact_wireless_provider": "sample string 6", "send_on_trip_processing_to_primary_contact": true, "send_on_trip_processing_to_secondary_contact": true, "send_on_quote_create_to_primary_contact": true, "send_on_quote_create_to_secondary_contact": true }, "confirmation": { "use_custom_mapping": true, "mapped_standart_confirmation": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_cancellation_confirmation": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_reservation_receipt": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_payment_receipt": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_customer_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_driver_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_greeting_sign": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_affiliate_trip_sheet": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "mapped_invoice": { "form_type": "standard_confirmation", "custom_form_type": "Customer", "custom_form_id": 1 }, "send_copies_to_reservation_email": true, "send_on_payment_create_to_customer": true, "send_on_trip_create_to_customer": true, "send_on_trip_update_to_customer": true, "send_on_trip_processing_to_booking_contact": true, "attach_pdf": true }, "distance_calculation": { "route_optimize_by": "distance", "road_type_to_avoid": "not_selected" } }
+
+
+## Group Company
+Provides read operations for Company Information resource.
+
+
+## Get [/Get]
+Returns Company Information by specified company ID.
+
+### Get [GET /companies/{company_alias}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "company_alias": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "city": "sample string 6", "address_line1": "sample string 7", "address_line2": "sample string 8", "business_number": "sample string 9", "is_business_number_visible": true, "phone1": "sample string 11", "phone2": "sample string 12", "fax": "sample string 13", "general_email": "sample string 14", "reservation_email": "sample string 15", "billing_email": "sample string 16", "quote_email": "sample string 17", "website_url": "sample string 18", "logo_image_url": "sample string 19", "company_modules": [ "sample string 1", "sample string 2" ] }
+
+
+## Collection [/Collection]
+Returns company information by specified company ID.
+
+### Get Collection [GET /companies?search_for={search_for}&is_active={is_active}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + search_for: ( string)
+    + is_active: true ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "company_alias": "sample string 1", "is_active": true }, { "company_alias": "sample string 1", "is_active": true } ] }
+
+
+## Group Customer Self Passenger
+Provides read operations of account's passengers.
+
+
+## Get [/Get]
+
+### Get [GET /customers/self/passengers/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+## Collection [/Collection]
+Returns paged collection of passengers.
+
+### Get Collection [GET /customers/self/passengers?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + is_active: true ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 } ] }
+
+
+## Group Customer Self Managed Contacts
+Provides managing of account's.
+
+
+## Collections [/Collections]
+Returns paged collection of Managed Contacts.
+
+### Get Collections [GET /customers/self/managed_contacts?is_active={is_active}&is_billing_contact={is_billing_contact}&is_booking_contact={is_booking_contact}&is_passenger={is_passenger}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + is_active: true ( object)
+    + is_billing_contact: ( object)
+    + is_booking_contact: ( object)
+    + is_passenger: ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 } ] }
+
+
+## CRUD [/CRUD]
+Provides CRUD (Create/Read/Update/Delete) operations for Managed Contacts.
+
+### Read [GET /customers/self/managed_contacts/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+Provides CRUD (Create/Read/Update/Delete) operations for Managed Contacts.
+
+### Create [POST /customers/self/managed_contacts]
+
++ Parameters
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `is_billing_contact` (boolean)
+    + `is_booking_contact` (boolean)
+    + `is_passenger` (boolean)
+    + `is_active` (boolean)
+    + `prefix` (string) String length: inclusive between 0 and 50.
+    + `first_name` (string) Required. String length: inclusive between 0 and 50.
+    + `last_name` (string) Required. String length: inclusive between 0 and 50.
+    + `position` (string) String length: inclusive between 0 and 50.
+    + `department` (string) String length: inclusive between 0 and 50.
+    + `address` (object)
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `emails` (array)
+    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `emails[].type` (object)
+    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "test@test.com", "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+### Update [PUT /customers/self/managed_contacts/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + `is_billing_contact` (boolean)
+    + `is_booking_contact` (boolean)
+    + `is_passenger` (boolean)
+    + `is_active` (boolean)
+    + `prefix` (string) String length: inclusive between 0 and 50.
+    + `first_name` (string) Required. String length: inclusive between 0 and 50.
+    + `last_name` (string) Required. String length: inclusive between 0 and 50.
+    + `position` (string) String length: inclusive between 0 and 50.
+    + `department` (string) String length: inclusive between 0 and 50.
+    + `address` (object)
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `emails` (array)
+    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `emails[].type` (object)
+    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+### Delete [DELETE /customers/self/managed_contacts/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+
+## Group Customer Self Invoice
+Provides viewing of account's Invoices.
+
+
+## Collection [/Collection]
+Returns paged collection of Invoices.
+
+### Get Collection [GET /customers/self/invoices?bill_to={bill_to}&from={from}&to={to}&confirmation_number={confirmation_number}&min_total_amount={min_total_amount}&max_total_amount={max_total_amount}&status={status}&page_index={page_index}&page_size={page_size}&sort_by={sort_by}&sort_order={sort_order}]
+
++ Parameters
+    + bill_to: ( string)
+    + from: ( object)
+    + to: ( object)
+    + confirmation_number: ( object)
+    + min_total_amount: ( object)
+    + max_total_amount: ( object)
+    + status: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+    + sort_by: confirmation_number ( string)
+    + sort_order: asc ( string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-10-30T17:28:05+02:00", "created_by": "sample string 24", "created_from": "unknown" }, { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-10-30T17:28:05+02:00", "created_by": "sample string 24", "created_from": "unknown" } ] }
+
+
+## Get [/Get]
+Returns Invoice
+
+### Get [GET /customers/self/invoices/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-10-30T17:28:05+02:00", "created_by": "sample string 24", "created_from": "unknown" }
+
+
+## Group Company System Preferences
+Provide operations for Company System preferences.
+
+
+## Get [/Get]
+Returns Company System preferences.
+
+### Get [GET /companies/{company_alias}/preferences/system]
+
++ Parameters
+    + company_alias: ( )
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "service_type_mapping": { "default_hourly_service_type_id": 1, "default_airport_departure_service_type_id": 1, "default_airport_arrival_service_type_id": 1, "default_point_to_point_service_type_id": 1 }, "ores": { "is_ores_enabled": true, "is_credit_card_required": true, "is_billing_address_required": true, "max_authentication_attempt_count": 1, "default_payment_gateway_id": 1, "payment_transaction_type": "AuthorizationAndCapture", "default_rental_agreement_id": 1, "allowed_payment_types": [ 1, 2 ], "is_rate_calculation_enabled": true, "is_reservation_auto_approve_enabled": true, "is_create_account_allowed": true, "is_create_quote_allowed": true, "is_create_reservation_allowed": true, "create_reservation_allowed_up_to": 1, "is_cancel_and_modify_reservation_allowed": true, "cancel_and_modify_reservation_allowed_up_to": 1, "is_reservation_cut_off_enabled": true, "reservation_cut_off_for_customer_begins_at": "00:00:00.1234567", "reservation_cut_off_for_customer_ends_at": "00:00:00.1234567" } }
+
+
+## Group Privacy Policy
+Provides operations for Privacy policy.
+
+
+## Get [/Get]
+
+### Get [GET /companies/{company_alias}/ores4/policy]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "company_alias_id": 1, "title": "sample string 2", "content": "sample string 3", "is_active": true }
+
+
+## Group Customer Self Billing Contact
+Provides managing of account's billing contacts.
+
+
+## Get Owner [/Get Owner]
+Returns owner Billing Contact information
+
+### Get [GET /customers/self/billing_contact]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+## Get [/Get]
+Returns Billing Contact by Id.
+
+### Get [GET /customers/self/billing_contacts/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
+
+## Collection [/Collection]
+Returns paged collection of billing contacts.
+
+### Get Collection [GET /customers/self/billing_contacts?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + is_active: true ( object)
+    + search_in: ( object)
+    + search_for: ( string)
+    + sort_by: ( object)
+    + sort_order: ( object)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "email": "test@test.com", "number": "1234567890", "company": "Limo Anywhere", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "is_billing_contact": true, "is_booking_contact": true, "is_passenger": true, "is_active": true, "prefix": "Mr.", "first_name": "John", "last_name": "Smith", "position": "Software developer", "department": "IT department", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "home_phone": "+1-234-1111112", "office_phone": "+1-234-1111111", "cellular_phone1": "+1-234-1111113", "cellular_phone2": "+1-234-1111114", "cellular_phone3": "+1-234-1111115", "fax1": "+1-234-1111116", "fax2": "+1-234-1111117", "emails": [ { "email": "test_1@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] }, { "email": "test_2@test.com", "type": [ "confirmation", "automatic_notification", "payment_receipt", "invoice", "other" ] } ], "default_payment_type_id": 1, "default_credit_card_id": 1 } ] }
+
+
+## Group Customer Self Statistics
+Provides viewing of account's statistics.
+
+
+## Get [/Get]
+Returns usage statictics.
+
+### Get [GET /customers/self/statistics/usage?from={from}&to={to}&count={count}]
+
++ Parameters
+    + from: ( object)
+    + to: ( object)
+    + count: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_usage": { "first_name": "Gavin", "last_name": "Baxter", "ride_count": 999, "total_spent": 9999.99 }, "passenger_usage": [ { "first_name": "Gareth", "last_name": "Burton", "ride_count": 333, "total_spent": 3333.33 }, { "first_name": "Davis", "last_name": "Randall", "ride_count": 666, "total_spent": 6666.66 } ] }
+
+
+## Group Poi
+Provides read operations for POI (Point of interest)
+
+
+## Collection [/Collection]
+Returns paged collection of POIs.
+
+### Get Collection [GET /companies/{company_alias}/pois?search={search}&type={type}&page_index={page_index}&page_size={page_size}&is_visible={is_visible}&is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + search: ( string)
+    + type: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+    + is_visible: ( object)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "type": "sample string 2", "web_site": "sample string 3", "email": "sample string 4", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 5", "is_active": true, "is_visible": true }, { "id": 1, "type": "sample string 2", "web_site": "sample string 3", "email": "sample string 4", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 5", "is_active": true, "is_visible": true } ] }
+
+
+## Group Customer Self Credit Card
+Provides managing of account's credit cards.
+
+
+## Owner Collection [/Owner Collection]
+Returns paged collection of owner account's billing contact`s/passenger's credit cards.
+
+### Get Billing Contact Collection [GET /customers/self/billing_contact/credit_cards?page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" } ] }
+
+Returns paged collection of account's credit cards.
+
+### Get Passenger Collection [GET /customers/self/credit_cards?page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" } ] }
+
+
+## Collection [/Collection]
+Returns paged collection of account's billing contact`s/passenger's credit cards.
+
+### Get Billing Contact Collection [GET /customers/self/billing_contact/{billing_contact_id}/credit_cards?page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + billing_contact_id: (required, int)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" } ] }
+
+
+### Get Collection for Passenger [GET /customers/self/passengers/{passenger_id}/credit_cards?page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + passenger_id: (required, int)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" } ] }
+
+
+## Get [/Get]
+Returns account's billing contact's/passenger's credit card with specified ID.
+
+### Get Billing Contact Credit Card [GET /customers/self/billing_contact/credit_cards/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
+
+### Get Passenger Credit Card [GET /customers/self/passengers/{passenger_id}/credit_cards/{id}]
+
++ Parameters
+    + passenger_id: (required, int)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
+
+## CRUD [/CRUD]
+CRUD (Create/Read/Update/Delete) operations for Account Credit Card.
+
+### Create [POST /customers/self/credit_cards]
+
++ Parameters
+
++ Request
+
+    + `card_number` (string) Required. String length: inclusive between 0 and 20.
+    + `card_holder_name` (string) String length: inclusive between 0 and 250.
+    + `billing_address` (object)
+    + `billing_address.name` (string) String length: inclusive between 0 and 500.
+    + `billing_address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `billing_address.country_code` (string) String length: inclusive between 0 and 5.
+    + `billing_address.state_code` (string) String length: inclusive between 0 and 5.
+    + `billing_address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `billing_address.county` (string) String length: inclusive between 0 and 250.
+    + `billing_address.city` (string) String length: inclusive between 0 and 250.
+    + `billing_address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `billing_address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `billing_address.latitude` (float)
+    + `billing_address.longitude` (float)
+    + `expires_at` (object)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
+
+### Read [GET /customers/self/credit_cards/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 0, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
+
+### Update [PUT /customers/self/credit_cards/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + `card_holder_name` (string) String length: inclusive between 0 and 250.
+    + `billing_address` (object)
+    + `billing_address.name` (string) String length: inclusive between 0 and 500.
+    + `billing_address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `billing_address.country_code` (string) String length: inclusive between 0 and 5.
+    + `billing_address.state_code` (string) String length: inclusive between 0 and 5.
+    + `billing_address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `billing_address.county` (string) String length: inclusive between 0 and 250.
+    + `billing_address.city` (string) String length: inclusive between 0 and 250.
+    + `billing_address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `billing_address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `billing_address.latitude` (float)
+    + `billing_address.longitude` (float)
+    + `expires_at` (object)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-07-30T17:19:10+03:00" }
+
+
+### Delete [DELETE /customers/self/credit_cards/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+
+## Group Occasion
+Provides read operations for Occasions resources.
+
+
+## Collection [/Collection]
+Returns company Occasions.
+
+### Get Collection [GET /companies/{company_alias}/lists/occasions?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "title": "sample string 2", "description": "sample string 3", "is_active": true }, { "id": 1, "title": "sample string 2", "description": "sample string 3", "is_active": true } ]
+
+
+## Group Customer Self Address
+Provides managing of account's stored addresses.
+
+
+## Collection [/Collection]
+Returns paged collection of Account's Stored Address.
+
+### Get Collection [GET /customers/self/addresses?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+    + type: ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "type": "other", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 } } ] }
+
+
+## CRUD [/CRUD]
+
+### Read [GET /customers/self/addresses/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "type": "other", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 } }
+
+CRUD operations for Customer Address.
+
+### Create [POST /customers/self/addresses]
+
++ Parameters
+
++ Request
+
+    + `type` (object) Required.
+    + `type.value` (string)
+    + `address` (object) Required.
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "type": "home", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 } }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "type": "other", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 } }
+
+Provides CRUD (Create/Read/Update/Delete) operations for Customer Address.
+
+### Update [PUT /customers/self/addresses/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + `type` (object) Required.
+    + `type.value` (string)
+    + `address` (object) Required.
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "type": "home", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 } }
+
+
+### Delete [DELETE /customers/self/addresses/{id}]
+
++ Parameters
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+
+## Group Airline
+Provides read operations for Airline(s)
+
+
+## Collection [/Collection]
+Returns paged collection of Airlines.
+
+### Get Collection [GET /airlines?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "iata": "sample string 1", "name": "sample string 2" }, { "iata": "sample string 1", "name": "sample string 2" } ] }
+
