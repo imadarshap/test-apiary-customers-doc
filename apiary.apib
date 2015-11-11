@@ -190,733 +190,6 @@ In 'execution' console you can see request/response samples, data types and size
             }
 
 
-## Group Rental Agreement
-Provides read operations for Rental Agreements.
-
-
-## Get [/Get]
-This method returns a Rental Agreement by Id.
-
-### Get [GET /companies/{company_alias}/rental_agreements/{id}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + id: `1` (required, int)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "id": 1, "created_at": "2015-10-30T17:28:05+02:00", "updated_at": "2015-10-30T17:28:05+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true }
-
-
-## Group Fbo
-Provides read operations for FBO(s) (Private Airlines)
-
-
-## Collection [/Collection]
-Returns a paged collection of FBO(s).
-
-### Get Collection [GET /companies/{company_alias}/fbos?search={search}&page_index={page_index}&page_size={page_size}&is_active={is_active}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + search: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + is_active: true ( object)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "total_count": 1, "items": [ { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true }, { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true } ] }
-
-
-## Group Service Type
-Provides read operations for Service Type(s).
-
-
-## Get [/Get]
-Returns a Service Type by Id or by Code.
-
-### Get [GET /companies/{company_alias}/service_types/{id}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + id: `1` (required, int)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
-
-
-### Get By Code [GET /companies/{company_alias}/service_types?code={code}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + code: (required, string)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
-
-
-## Collection [/Collection]
-Returns a collection of Service Types.
-
-### Get Collection [GET /companies/{company_alias}/service_types?is_active={is_active}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + is_active: true ( object)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }, { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true } ]
-
-
-## Group Airport
-Provides read operations for Airport(s)
-
-
-## Collection [/Collection]
-Returns a paged collection of Airports.
-
-### Get Collecton [GET /airports?search={search}&page_index={page_index}&page_size={page_size}]
-
-+ Parameters
-    + search: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "total_count": 1, "items": [ { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 }, { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 } ] }
-
-
-## Group Customer Self Subscriptions
-Provides viewing and editing operations of the customer subscriptions.
-
-
-## iOS [/iOS]
-Operations of iOS device subscriptions on topics for customer.
-
-### Get [GET /customers/self/subscriptions/ios]
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
-
-
-### Create or Update [PUT /customers/self/subscriptions/ios]
-
-+ Parameters
-
-+ Request
-
-    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "device_id": "sample string 1" }
-
-
-### Delete [DELETE /customers/self/subscriptions/ios]
-
-+ Parameters
-
-+ Request
-
-    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "device_id": "sample string 1" }
-
-
-## Android [/Android]
-Operations of Android device subscriptions on topics for customer.
-
-### Create or Update [PUT /customers/self/subscriptions/android]
-
-+ Parameters
-
-+ Request
-
-    + `device_id` (string) Required.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "device_id": "sample string 1" }
-
-
-### Delete [DELETE /customers/self/subscriptions/android]
-
-+ Parameters
-
-+ Request
-
-    + `device_id` (string) Required.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "device_id": "sample string 1" }
-
-
-### Get [GET /customers/self/subscriptions/android]
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
-
-
-## SMS [/SMS]
-Operations of cellular phone number subscriptions on topics for customer.
-
-### Create or Update [PUT /customers/self/subscriptions/sms]
-
-+ Parameters
-
-+ Request
-
-    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "phone_number": "sample string 1" }
-
-
-### Delete [DELETE /customers/self/subscriptions/sms]
-
-+ Parameters
-
-+ Request
-
-    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "phone_number": "sample string 1" }
-
-
-### Get [GET /customers/self/subscriptions/sms]
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "phone_number": "sample string 1" }, { "phone_number": "sample string 1" } ]
-
-
-## Web Hook [/Web Hook]
-Operations of web hook subscriptions on topics for customer.
-
-### Create ore update [PUT /customers/self/subscriptions/webhook]
-
-+ Parameters
-
-+ Request
-
-    + `uri` (string) Required.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "uri": "sample string 1" }
-
-
-### Delete [DELETE /customers/self/subscriptions/webhook]
-
-+ Parameters
-
-+ Request
-
-    + `uri` (string) Required.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "uri": "sample string 1" }
-
-
-### Get [GET /customers/self/subscriptions/webhook]
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "uri": "sample string 1" }, { "uri": "sample string 1" } ]
-
-
-## Group Promotion Code
-Provides read operations for Promotion Code(s).
-
-
-## Get [/Get]
-Returns a Promotion Code.
-
-### Get [GET /companies/{company_alias}/promotion_codes/{code}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + code: (required, string)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }
-
-
-## Collection [/Collection]
-Returns a collection of Promotion Codes.
-
-### Get Collection [GET /companies/{company_alias}/promotion_codes]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] } ]
-
-
-## Group Customer Sign Up
-Provides operations that allow users to create and register a customer account.
-
-
-## Sign Up [/Sign Up]
-
-### Sign Up [POST /companies/{company_alias}/customers/sign_up]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
-    + `password` (string) Required. String length: inclusive between 6 and 50.
-    + `prefix` (string) String length: inclusive between 0 and 50.
-    + `first_name` (string) Required. String length: inclusive between 0 and 50.
-    + `last_name` (string) Required. String length: inclusive between 0 and 50.
-    + `position` (string) String length: inclusive between 0 and 50.
-    + `department` (string) String length: inclusive between 0 and 50.
-    + `company` (string) String length: inclusive between 0 and 50.
-    + `address` (object)
-    + `address.name` (string) String length: inclusive between 0 and 500.
-    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
-    + `address.country_code` (string) String length: inclusive between 0 and 5.
-    + `address.state_code` (string) String length: inclusive between 0 and 5.
-    + `address.postal_code` (string) String length: inclusive between 0 and 15.
-    + `address.county` (string) String length: inclusive between 0 and 250.
-    + `address.city` (string) String length: inclusive between 0 and 250.
-    + `address.address_line1` (string) String length: inclusive between 0 and 250.
-    + `address.address_line2` (string) String length: inclusive between 0 and 250.
-    + `address.latitude` (float)
-    + `address.longitude` (float)
-    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
-    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
-    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
-    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
-    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
-    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
-    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
-    + `emails` (array)
-    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
-    + `emails[].type` (object)
-    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
-    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "email": "sample string 1", "password": "sample string 2", "prefix": "sample string 3", "first_name": "sample string 4", "last_name": "sample string 5", "position": "sample string 6", "department": "sample string 7", "company": "sample string 8", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "home_phone": "sample string 9", "office_phone": "sample string 10", "cellular_phone1": "sample string 11", "cellular_phone2": "sample string 12", "cellular_phone3": "sample string 13", "fax1": "sample string 14", "fax2": "sample string 15", "emails": [ { "email": "sample string 1" }, { "email": "sample string 1" } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-
-## Validation [/Validation]
-
-### Validate Email [POST /companies/{company_alias}/customers/emails/validate]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "email": "sample string 1" }
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-
-### Validate Company [POST /companies/{company_alias}/customers/companies/validate]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + `company` (string) Required. String length: inclusive between 0 and 50.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "company": "sample string 1" }
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-
-## Group Customer Password
-Provides operations for password set or reset.
-
-
-## Init Set [/Init Set]
-This allows to set the client password
-
-### Init Set [POST /companies/{company_alias}/customers/passwords/init_set]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "email": "sample string 1" }
-
-
-## Reset [/Reset]
-This allows to re-set the client password
-
-### Reset [POST /companies/{company_alias}/customers/passwords/set]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + `token` (string) Required. String length: inclusive between 10 and 10.
-    + `new_password` (string) Required. Matching regular expression pattern: ^((?=.*\d)(?=.*\w)(?=.*\W).{8,50})$. String length: inclusive between 8 and 50.
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-    + Body
-
-            { "token": "sample string 1", "new_password": "sample string 2" }
-
-
-## Group ORES 4 Service Type
-Provides operations for ORES 4 Service Type resources. (In future will be joined with Service Type as sub-model)
-
-
-## Get [/Get]
-Returns Service Type.
-
-### Get [GET /companies/{company_alias}/ores4/service_types/{id}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + id: `1` (required, int)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }
-
-
-## Collection [/Collection]
-Returns collection of Service Types.
-
-### Get Collection [GET /companies/{company_alias}/ores4/service_types]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }, { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 } ]
-
-
-## Group Referral Source
-Provides operations for Referral Source resources.
-
-
-## Get Collection [/Get Collection]
-Returns collection of company Referral Sources.
-
-### Get Collection [GET /companies/{company_alias}/lists/referral_sources?is_active={is_active}]
-
-+ Parameters
-    + company_alias: `testores4` (required, string)
-    + is_active: true ( object)
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-            Authorization: bearer {access_token}
-
-+ Response 200
-
-    + Headers
-
-            Content-Type: application/json
-
-    + Body
-
-            [ { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true }, { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true } ]
-
-
 ## Group Booking
 
 
@@ -1528,6 +801,736 @@ So table below describe reason phrases that can occurs during Booking process an
     + Body
 
             { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 0.0, "longitude": 0.0 }, "expires_at": "2016-06-30T17:19:10+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
+
+
+## Group Customer Sign Up
+Provides operations that allow users to create and register a customer account.
+
+
+## Sign Up [/Sign Up]
+
+### Sign Up [POST /companies/{company_alias}/customers/sign_up]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `password` (string) Required. String length: inclusive between 6 and 50.
+    + `prefix` (string) String length: inclusive between 0 and 50.
+    + `first_name` (string) Required. String length: inclusive between 0 and 50.
+    + `last_name` (string) Required. String length: inclusive between 0 and 50.
+    + `position` (string) String length: inclusive between 0 and 50.
+    + `department` (string) String length: inclusive between 0 and 50.
+    + `company` (string) String length: inclusive between 0 and 50.
+    + `address` (object)
+    + `address.name` (string) String length: inclusive between 0 and 500.
+    + `address.phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `address.country_code` (string) String length: inclusive between 0 and 5.
+    + `address.state_code` (string) String length: inclusive between 0 and 5.
+    + `address.postal_code` (string) String length: inclusive between 0 and 15.
+    + `address.county` (string) String length: inclusive between 0 and 250.
+    + `address.city` (string) String length: inclusive between 0 and 250.
+    + `address.address_line1` (string) String length: inclusive between 0 and 250.
+    + `address.address_line2` (string) String length: inclusive between 0 and 250.
+    + `address.latitude` (float)
+    + `address.longitude` (float)
+    + `home_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `office_phone` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `cellular_phone3` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax1` (string) Phone number. String length: inclusive between 0 and 50.
+    + `fax2` (string) Phone number. String length: inclusive between 0 and 50.
+    + `emails` (array)
+    + `emails[].email` (string) Required. Email address. String length: inclusive between 0 and 255.
+    + `emails[].type` (object)
+    + `default_payment_type_id` (int) Range: inclusive between 1 and 2147483647.
+    + `default_credit_card_id` (int) Range: inclusive between 1 and 2147483647.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1", "password": "sample string 2", "prefix": "sample string 3", "first_name": "sample string 4", "last_name": "sample string 5", "position": "sample string 6", "department": "sample string 7", "company": "sample string 8", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "home_phone": "sample string 9", "office_phone": "sample string 10", "cellular_phone1": "sample string 11", "cellular_phone2": "sample string 12", "cellular_phone3": "sample string 13", "fax1": "sample string 14", "fax2": "sample string 15", "emails": [ { "email": "sample string 1" }, { "email": "sample string 1" } ], "default_payment_type_id": 1, "default_credit_card_id": 1 }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+## Validation [/Validation]
+
+### Validate Email [POST /companies/{company_alias}/customers/emails/validate]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1" }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+### Validate Company [POST /companies/{company_alias}/customers/companies/validate]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `company` (string) Required. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "company": "sample string 1" }
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+
+## Group Customer Password
+Provides operations for password set or reset.
+
+
+## Init Set [/Init Set]
+This allows to set the client password
+
+### Init Set [POST /companies/{company_alias}/customers/passwords/init_set]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `email` (string) Required. Email address. String length: inclusive between 0 and 255.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "email": "sample string 1" }
+
+
+## Reset [/Reset]
+This allows to re-set the client password
+
+### Reset [POST /companies/{company_alias}/customers/passwords/set]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + `token` (string) Required. String length: inclusive between 10 and 10.
+    + `new_password` (string) Required. Matching regular expression pattern: ^((?=.*\d)(?=.*\w)(?=.*\W).{8,50})$. String length: inclusive between 8 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "token": "sample string 1", "new_password": "sample string 2" }
+
+
+## Group Rental Agreement
+Provides read operations for Rental Agreements.
+
+
+## Get [/Get]
+This method returns a Rental Agreement by Id.
+
+### Get [GET /companies/{company_alias}/rental_agreements/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "created_at": "2015-10-30T17:28:05+02:00", "updated_at": "2015-10-30T17:28:05+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true }
+
+
+## Group Fbo
+Provides read operations for FBO(s) (Private Airlines)
+
+
+## Collection [/Collection]
+Returns a paged collection of FBO(s).
+
+### Get Collection [GET /companies/{company_alias}/fbos?search={search}&page_index={page_index}&page_size={page_size}&is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true }, { "id": 1, "airport_code": "sample string 2", "address": { "name": "sample string 1", "phone": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "county": "sample string 6", "city": "sample string 7", "address_line1": "sample string 8", "address_line2": "sample string 9", "latitude": 10.1, "longitude": 11.1 }, "instructions": "sample string 3", "is_active": true } ] }
+
+
+## Group Service Type
+Provides read operations for Service Type(s).
+
+
+## Get [/Get]
+Returns a Service Type by Id or by Code.
+
+### Get [GET /companies/{company_alias}/service_types/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
+
+
+### Get By Code [GET /companies/{company_alias}/service_types?code={code}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + code: (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }
+
+
+## Collection [/Collection]
+Returns a collection of Service Types.
+
+### Get Collection [GET /companies/{company_alias}/service_types?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true }, { "id": 1, "code": "sample string 2", "name": "sample string 3", "is_visible": true, "is_active": true } ]
+
+
+## Group Airport
+Provides read operations for Airport(s)
+
+
+## Collection [/Collection]
+Returns a paged collection of Airports.
+
+### Get Collecton [GET /airports?search={search}&page_index={page_index}&page_size={page_size}]
+
++ Parameters
+    + search: ( string)
+    + page_index: 1 ( int)
+    + page_size: 20 ( int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "total_count": 1, "items": [ { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 }, { "iata": "sample string 1", "name": "sample string 2", "country_code": "sample string 3", "state_code": "sample string 4", "postal_code": "sample string 5", "latitude": 6.1, "longitude": 7.1 } ] }
+
+
+## Group Customer Self Subscriptions
+Provides viewing and editing operations of the customer subscriptions.
+
+
+## iOS [/iOS]
+Operations of iOS device subscriptions on topics for customer.
+
+### Get [GET /customers/self/subscriptions/ios]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
+
+
+### Create or Update [PUT /customers/self/subscriptions/ios]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/ios]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required. Matching regular expression pattern: ^[0-9A-F]+$. String length: inclusive between 40 and 40.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+## Android [/Android]
+Operations of Android device subscriptions on topics for customer.
+
+### Create or Update [PUT /customers/self/subscriptions/android]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/android]
+
++ Parameters
+
++ Request
+
+    + `device_id` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "device_id": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/android]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "device_id": "sample string 1" }, { "device_id": "sample string 1" } ]
+
+
+## SMS [/SMS]
+Operations of cellular phone number subscriptions on topics for customer.
+
+### Create or Update [PUT /customers/self/subscriptions/sms]
+
++ Parameters
+
++ Request
+
+    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "phone_number": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/sms]
+
++ Parameters
+
++ Request
+
+    + `phone_number` (string) Required. Phone number. String length: inclusive between 0 and 50.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "phone_number": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/sms]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "phone_number": "sample string 1" }, { "phone_number": "sample string 1" } ]
+
+
+## Web Hook [/Web Hook]
+Operations of web hook subscriptions on topics for customer.
+
+### Create ore update [PUT /customers/self/subscriptions/webhook]
+
++ Parameters
+
++ Request
+
+    + `uri` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "uri": "sample string 1" }
+
+
+### Delete [DELETE /customers/self/subscriptions/webhook]
+
++ Parameters
+
++ Request
+
+    + `uri` (string) Required.
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
+    + Body
+
+            { "uri": "sample string 1" }
+
+
+### Get [GET /customers/self/subscriptions/webhook]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "uri": "sample string 1" }, { "uri": "sample string 1" } ]
+
+
+## Group Promotion Code
+Provides read operations for Promotion Code(s).
+
+
+## Get [/Get]
+Returns a Promotion Code.
+
+### Get [GET /companies/{company_alias}/promotion_codes/{code}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + code: (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }
+
+
+## Collection [/Collection]
+Returns a collection of Promotion Codes.
+
+### Get Collection [GET /companies/{company_alias}/promotion_codes]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" }, { "date_from": "2015-10-30T17:28:05+02:00", "date_to": "2015-10-30T17:28:05+02:00" } ] } ]
+
+
+
+
+## Group ORES 4 Service Type
+Provides operations for ORES 4 Service Type resources. (In future will be joined with Service Type as sub-model)
+
+
+## Get [/Get]
+Returns Service Type.
+
+### Get [GET /companies/{company_alias}/ores4/service_types/{id}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + id: `1` (required, int)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }
+
+
+## Collection [/Collection]
+Returns collection of Service Types.
+
+### Get Collection [GET /companies/{company_alias}/ores4/service_types]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 }, { "service_type_id": 1, "rental_agreement_id": 1, "pricing_type": [], "label": "sample string 2", "pickup_template": [], "dropoff_template": [], "stop_template": [], "icon_name": "sample string 3", "is_active": true, "is_visible_on_landing_page": true, "order_no": 6 } ]
+
+
+## Group Referral Source
+Provides operations for Referral Source resources.
+
+
+## Get Collection [/Get Collection]
+Returns collection of company Referral Sources.
+
+### Get Collection [GET /companies/{company_alias}/lists/referral_sources?is_active={is_active}]
+
++ Parameters
+    + company_alias: `testores4` (required, string)
+    + is_active: true ( object)
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: bearer {access_token}
+
++ Response 200
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            [ { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true }, { "id": 1, "name": "sample string 2", "description": "sample string 3", "is_active": true } ]
+
 
 
 ## Group Company UI Preferences
