@@ -1,15 +1,9 @@
 FORMAT: 1A
 HOST: https://api.mylimobiz.com/
-# ASP.NET Web API Help Page
+# Customer API - V2.0
 ## Overview
 
-The LAAPINEW is a programmatic interface for automating tasks and developing custom applications for usage Limo Anywhere system.
-API allows you to interact with our system programmatically from your own application.
-Using the API you interact with Resources such as:
-- Reservations
-- Customer Profiles
-- Reference Data, eg: Airports, Addresses, POIs, FBOs, Service Types etc.
-- Notification subscriptions
+The Customer API is used to create, modify, and cancel reservations for a specified customer. 
 
 The API attempts to conform to the <a href="https://en.wikipedia.org/wiki/Representational_state_transfer"> RESTful </a> design principles.
 You interact with the resources exposed via the API by accessing resource collection and element URIs using the HTTP verbs (GET, POST, PUT, and DELETE).
@@ -30,7 +24,7 @@ API accepts and returns JSON data.
 |500 | Internal Server Error. |
 
 
-* Conflict can be provoked by very many reasons. So in case of 409 error pay special attention to response reason phrase that can help to determine case of conflict more quickly.
+* Conflict can be provoked due to many reasons. In case of 409 error, pay special attention to the response reason which will specify a more direct cause of the conflict.
 
 
 ##Group Authentication
