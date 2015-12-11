@@ -203,9 +203,9 @@ Returns Payment Types collection.
 ### Get Collection [GET /companies/{company_alias}/resources/payment_types?is_active={is_active}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -232,7 +232,7 @@ Returns Payment Types collection.
 ### GetAllPaymentTypesAsync [GET /companies/{company_alias}/payment_types?is_active={is_active}]
 
 + Parameters
-    + is_active: true ( object)
+    + is_active: true (optional, object)
     + company_alias: ( )
 
 + Request
@@ -339,9 +339,9 @@ Returns paged collection of Airports.
 ### Get Collecton [GET /airports?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -365,9 +365,9 @@ Returns paged collection of Airports.
 ### Get Collecton [GET /resources/airports?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -447,10 +447,10 @@ Returns paged collection of Account's Stored Address.
 ### Get Collection [GET /customers/self/addresses?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + type: ( object)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + type: (optional, object)
 
 + Request
 
@@ -593,8 +593,8 @@ Returns paged collection of owner account's billing contact`s/passenger's credit
 ### Get Billing Contact Collection [GET /customers/self/billing_contact/credit_cards?page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -611,15 +611,15 @@ Returns paged collection of owner account's billing contact`s/passenger's credit
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" } ] }
+            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" } ] }
 
 Returns paged collection of account's credit cards.
 
 ### Get Passenger Collection [GET /customers/self/credit_cards?page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -636,7 +636,7 @@ Returns paged collection of account's credit cards.
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" } ] }
+            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" } ] }
 
 
 ## Collection [/Collection]
@@ -646,8 +646,8 @@ Returns paged collection of account's billing contact`s/passenger's credit cards
 
 + Parameters
     + billing_contact_id: (required, int)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -664,15 +664,15 @@ Returns paged collection of account's billing contact`s/passenger's credit cards
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" } ] }
+            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" } ] }
 
 
 ### Get Collection for Passenger [GET /customers/self/passengers/{passenger_id}/credit_cards?page_index={page_index}&page_size={page_size}]
 
 + Parameters
     + passenger_id: (required, int)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -689,7 +689,7 @@ Returns paged collection of account's billing contact`s/passenger's credit cards
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" } ] }
+            { "total_count": 1, "items": [ { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" } ] }
 
 
 ## Get [/Get]
@@ -715,7 +715,7 @@ Returns account's billing contact's/passenger's credit card with specified ID.
 
     + Body
 
-            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 
 ### Get Passenger Credit Card [GET /customers/self/passengers/{passenger_id}/credit_cards/{id}]
@@ -739,7 +739,7 @@ Returns account's billing contact's/passenger's credit card with specified ID.
 
     + Body
 
-            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 
 ## CRUD [/CRUD]
@@ -774,7 +774,7 @@ CRUD (Create/Read/Update/Delete) operations for Account Credit Card.
 
     + Body
 
-            { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 + Response 200
 
@@ -784,7 +784,7 @@ CRUD (Create/Read/Update/Delete) operations for Account Credit Card.
 
     + Body
 
-            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 
 ### Read [GET /customers/self/credit_cards/{id}]
@@ -807,7 +807,7 @@ CRUD (Create/Read/Update/Delete) operations for Account Credit Card.
 
     + Body
 
-            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "id": 123, "card_number_first_digit": "5361", "card_number_last_digits": "4007", "card_network": "visa", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 
 ### Update [PUT /customers/self/credit_cards/{id}]
@@ -839,7 +839,7 @@ CRUD (Create/Read/Update/Delete) operations for Account Credit Card.
 
     + Body
 
-            { "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-10T16:57:23+03:00" }
+            { "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-09-11T13:50:28+03:00" }
 
 
 ### Delete [DELETE /customers/self/credit_cards/{id}]
@@ -883,7 +883,7 @@ Returns Promotion Code.
 
     + Body
 
-            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] }
+            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] }
 
 Returns Promotion Code.
 
@@ -908,7 +908,7 @@ Returns Promotion Code.
 
     + Body
 
-            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] }
+            { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] }
 
 
 ## Collection [/Collection]
@@ -917,8 +917,8 @@ Returns collection of Promotion Codes.
 ### Get Collection [GET /companies/{company_alias}/promotion_codes?page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -936,15 +936,15 @@ Returns collection of Promotion Codes.
 
     + Body
 
-            { "total_count": 1, "items": [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] } ] }
+            { "total_count": 1, "items": [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] } ] }
 
 Returns collection of Promotion Codes.
 
 ### Get Collection [GET /companies/{company_alias}/resources/promotion_codes?page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -962,7 +962,7 @@ Returns collection of Promotion Codes.
 
     + Body
 
-            { "total_count": 1, "items": [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" }, { "date_from": "2015-12-10T17:02:39+02:00", "date_to": "2015-12-10T17:02:39+02:00" } ] } ] }
+            { "total_count": 1, "items": [ { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] }, { "code": "sample string 1", "service_types": [ 1, 2 ], "vehicle_types": [ 1, 2 ], "postal_codes": [ "sample string 1", "sample string 2" ], "airport_codes": [ "sample string 1", "sample string 2" ], "description": "sample string 2", "is_discount": true, "is_always_active": true, "date_rule": [ { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" }, { "date_from": "2015-12-11T13:50:28+02:00", "date_to": "2015-12-11T13:50:28+02:00" } ] } ] }
 
 
 ## Group Poi Type
@@ -975,9 +975,9 @@ Returns paged collection of POI types.
 ### Get Collection [GET /companies/{company_alias}/pois/types?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -1002,9 +1002,9 @@ Returns paged collection of POI types.
 ### Get Collection [GET /companies/{company_alias}/resources/pois/types?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -1035,11 +1035,11 @@ Returns company information by specified company ID.
 ### Get Collection [GET /companies?search_for={search_for}&is_active={is_active}&consumer_id={consumer_id}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + is_active: true ( object)
-    + consumer_id: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + is_active: true (optional, object)
+    + consumer_id: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -1121,16 +1121,16 @@ Returns paged collection of Managed Contacts.
 ### Get Collections [GET /customers/self/managed_contacts?is_active={is_active}&is_billing_contact={is_billing_contact}&is_booking_contact={is_booking_contact}&is_passenger={is_passenger}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + is_billing_contact: ( object)
-    + is_booking_contact: ( object)
-    + is_passenger: ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + is_billing_contact: (optional, object)
+    + is_booking_contact: (optional, object)
+    + is_passenger: (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -1338,9 +1338,9 @@ Returns companies information.
 ### Get Collection [GET /companies/{company_alias}/aliases?page_index={page_index}&page_size={page_size}&is_active={is_active}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + is_active: true ( object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + is_active: true (optional, object)
     + company_alias: ( )
 
 + Request
@@ -1371,9 +1371,9 @@ Returns paged collection of Airlines.
 ### Get Collection [GET /airlines?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -1397,9 +1397,9 @@ Returns paged collection of Airlines.
 ### Get Collection [GET /resources/airlines?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -1504,10 +1504,10 @@ Returns collection of ORES Services.
 ### Get Collection [GET /companies/{company_alias}/resources/ores/service_types?is_active={is_active}&is_visible_on_landing_page={is_visible_on_landing_page}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + is_visible_on_landing_page: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + is_visible_on_landing_page: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -1696,13 +1696,13 @@ Returns Paged Collection of Customer Self Booking contacts.
 ### Get Collection [GET /customers/self/booking_contacts?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -1732,10 +1732,10 @@ Returns paged collection of FBO(s).
 ### Get Collection [GET /companies/{company_alias}/fbos?search_for={search_for}&is_active={is_active}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + is_active: true ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + is_active: true (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -1760,10 +1760,10 @@ Returns paged collection of FBO(s).
 ### Get Collection [GET /companies/{company_alias}/resources/fbos?search_for={search_for}&is_active={is_active}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + is_active: true ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + is_active: true (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -1794,9 +1794,9 @@ Returns usage statictics.
 ### Get [GET /customers/self/statistics/usage?from={from}&to={to}&count={count}]
 
 + Parameters
-    + from: ( object)
-    + to: ( object)
-    + count: 20 ( int)
+    + from: (optional, object)
+    + to: (optional, object)
+    + count: 20 (optional, int)
 
 + Request
 
@@ -1981,9 +1981,9 @@ Returns collection of company Referral Sources.
 ### Get Collection [GET /companies/{company_alias}/resources/referral_sources?is_active={is_active}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -2040,9 +2040,9 @@ This method returns Rental Agreement by Id.
 ### Get Collection [GET /companies/{company_alias}/resources/rental_agreements?page_index={page_index}&page_size={page_size}&is_active={is_active}]
 
 + Parameters
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + is_active: true ( object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + is_active: true (optional, object)
     + company_alias: ( )
 
 + Request
@@ -2060,7 +2060,7 @@ This method returns Rental Agreement by Id.
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 1, "created_at": "2015-12-10T17:02:39+02:00", "updated_at": "2015-12-10T17:02:39+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true }, { "id": 1, "created_at": "2015-12-10T17:02:39+02:00", "updated_at": "2015-12-10T17:02:39+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true } ] }
+            { "total_count": 1, "items": [ { "id": 1, "created_at": "2015-12-11T13:50:28+02:00", "updated_at": "2015-12-11T13:50:28+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true }, { "id": 1, "created_at": "2015-12-11T13:50:28+02:00", "updated_at": "2015-12-11T13:50:28+02:00", "name": "sample string 3", "text": "sample string 4", "is_active": true } ] }
 
 
 ## Group Consumer
@@ -2090,7 +2090,7 @@ Returns consumer.
 
     + Body
 
-            { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-10T17:02:39+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-10T17:02:39+02:00" }
+            { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-11T13:50:28+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-11T13:50:28+02:00" }
 
 
 ## CreateConsumerAsync [/CreateConsumerAsync]
@@ -2133,7 +2133,7 @@ Creates consumer.
 
     + Body
 
-            { "name": "sample string 1", "api_plan_id": 1, "address_line": "sample string 2", "city": "sample string 3", "state": "sample string 4", "postal_code": "sample string 5", "main_phone1": "sample string 6", "main_phone2": "sample string 7", "cellular_phone": "sample string 8", "email1": "sample string 9", "email2": "sample string 10", "sales_representative_id": 1, "notes": "sample string 11", "card_holder_name": "sample string 12", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_number": "sample string 13", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 16.0, "next_payment_at": "2015-12-10T17:02:39+02:00" }
+            { "name": "sample string 1", "api_plan_id": 1, "address_line": "sample string 2", "city": "sample string 3", "state": "sample string 4", "postal_code": "sample string 5", "main_phone1": "sample string 6", "main_phone2": "sample string 7", "cellular_phone": "sample string 8", "email1": "sample string 9", "email2": "sample string 10", "sales_representative_id": 1, "notes": "sample string 11", "card_holder_name": "sample string 12", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_number": "sample string 13", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 16.0, "next_payment_at": "2015-12-11T13:50:28+02:00" }
 
 + Response 200
 
@@ -2143,7 +2143,7 @@ Creates consumer.
 
     + Body
 
-            { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-10T17:02:39+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-10T17:02:39+02:00" }
+            { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-11T13:50:28+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-11T13:50:28+02:00" }
 
 
 ## PutConsumerAsync [/PutConsumerAsync]
@@ -2187,7 +2187,7 @@ Update consumer.
 
     + Body
 
-            { "name": "sample string 1", "api_plan_id": 1, "address_line": "sample string 2", "city": "sample string 3", "state": "sample string 4", "postal_code": "sample string 5", "main_phone1": "sample string 6", "main_phone2": "sample string 7", "cellular_phone": "sample string 8", "email1": "sample string 9", "email2": "sample string 10", "sales_representative_id": 1, "notes": "sample string 11", "card_holder_name": "sample string 12", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_number": "sample string 13", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 16.0, "next_payment_at": "2015-12-10T17:02:39+02:00" }
+            { "name": "sample string 1", "api_plan_id": 1, "address_line": "sample string 2", "city": "sample string 3", "state": "sample string 4", "postal_code": "sample string 5", "main_phone1": "sample string 6", "main_phone2": "sample string 7", "cellular_phone": "sample string 8", "email1": "sample string 9", "email2": "sample string 10", "sales_representative_id": 1, "notes": "sample string 11", "card_holder_name": "sample string 12", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_number": "sample string 13", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 16.0, "next_payment_at": "2015-12-11T13:50:28+02:00" }
 
 
 ## DeleteConsumerAsync [/DeleteConsumerAsync]
@@ -2212,11 +2212,11 @@ Returns Consumers paged collection.
 ### GetConsumersAsync [GET /admin/consumers?search_for={search_for}&api_plan_id={api_plan_id}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + type: ( object)
-    + api_plan_id: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + type: (optional, object)
+    + api_plan_id: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -2233,7 +2233,7 @@ Returns Consumers paged collection.
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-10T17:02:39+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-10T17:02:39+02:00" }, { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-10T17:02:39+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-10T17:02:39+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-10T17:02:39+02:00" } ] }
+            { "total_count": 1, "items": [ { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-11T13:50:28+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-11T13:50:28+02:00" }, { "id": 1, "card_last_digits": "sample string 2", "created_at": "2015-12-11T13:50:28+02:00", "name": "sample string 5", "api_plan_id": 1, "address_line": "sample string 6", "city": "sample string 7", "state": "sample string 8", "postal_code": "sample string 9", "main_phone1": "sample string 10", "main_phone2": "sample string 11", "cellular_phone": "sample string 12", "email1": "sample string 13", "email2": "sample string 14", "sales_representative_id": 1, "notes": "sample string 15", "card_holder_name": "sample string 16", "card_expires_at": "2015-12-11T13:50:28+02:00", "card_network": "other", "is_monthly_payment_auto_calculation_enabled": true, "is_active": true, "monthly_fee": 19.0, "next_payment_at": "2015-12-11T13:50:28+02:00" } ] }
 
 
 ## Group Occasion
@@ -2246,9 +2246,9 @@ Returns company Occasions.
 ### Get Collection [GET /companies/{company_alias}/resources/occasions?is_active={is_active}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -2279,9 +2279,9 @@ Returns paged collection of Seaports.
 ### Get Collection [GET /companies/{company_alias}/seaports?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -2306,9 +2306,9 @@ Returns paged collection of Seaports.
 ### Get Collection [GET /companies/{company_alias}/resources/seaports?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
     + company_alias: ( )
 
 + Request
@@ -2418,13 +2418,13 @@ Returns paged collection of billing contacts.
 ### Get Collection [GET /customers/self/billing_contacts?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -2479,13 +2479,13 @@ Returns paged collection of passengers.
 ### Get Collection [GET /customers/self/passengers?is_active={is_active}&search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + is_active: true ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + is_active: true (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -2545,17 +2545,17 @@ Returns paged collection of Invoices.
 ### Get Collection [GET /customers/self/invoices?bill_to={bill_to}&from={from}&to={to}&confirmation_number={confirmation_number}&min_total_amount={min_total_amount}&max_total_amount={max_total_amount}&status={status}&page_index={page_index}&page_size={page_size}&sort_by={sort_by}&sort_order={sort_order}]
 
 + Parameters
-    + bill_to: ( string)
-    + from: ( object)
-    + to: ( object)
-    + confirmation_number: ( object)
-    + min_total_amount: ( object)
-    + max_total_amount: ( object)
-    + status: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + sort_by: confirmation_number ( string)
-    + sort_order: asc ( string)
+    + bill_to: (optional, string)
+    + from: (optional, object)
+    + to: (optional, object)
+    + confirmation_number: (optional, object)
+    + min_total_amount: (optional, object)
+    + max_total_amount: (optional, object)
+    + status: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + sort_by: confirmation_number (optional, string)
+    + sort_order: asc (optional, string)
 
 + Request
 
@@ -2572,7 +2572,7 @@ Returns paged collection of Invoices.
 
     + Body
 
-            { "total_count": 1, "items": [ { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-10T17:02:39+02:00", "created_by": "sample string 24", "created_from": "unknown" }, { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-10T17:02:39+02:00", "created_by": "sample string 24", "created_from": "unknown" } ] }
+            { "total_count": 1, "items": [ { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-11T13:50:28+02:00", "created_by": "sample string 24", "created_from": "unknown" }, { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-11T13:50:28+02:00", "created_by": "sample string 24", "created_from": "unknown" } ] }
 
 
 ## Get [/Get]
@@ -2598,7 +2598,7 @@ Returns Invoice
 
     + Body
 
-            { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-10T17:02:39+02:00", "created_by": "sample string 24", "created_from": "unknown" }
+            { "id": 1, "company_alias_id": 1, "customer_id": 2, "status": "unpaid", "is_finalized": true, "confirmation_prefix": "sample string 4", "confirmation_number": "sample string 5", "confirmation_suffix": "sample string 6", "client_details_line1": "sample string 7", "client_details_line2": "sample string 8", "client_details_line3": "sample string 9", "client_details_line4": "sample string 10", "reference_number": "sample string 11", "terms": "due_upon_receipt", "message": "sample string 12", "notes": "sample string 13", "discount_type": "fixed", "discount_amount": 14.0, "discount_total_amount": 15.0, "misc_fee_title": "sample string 16", "misc_fee_type": "fixed", "misc_fee_amount": 17.0, "misc_fee_total_amount": 18.0, "currency_code": "sample string 19", "total_amount": 20.0, "receipted_amount": 21.0, "authorized_amount": 22.0, "created_at": "2015-12-11T13:50:28+02:00", "created_by": "sample string 24", "created_from": "unknown" }
 
 
 ## Group Poi
@@ -2611,12 +2611,12 @@ Returns paged collection of POIs.
 ### Get Collection [GET /companies/{company_alias}/pois?search_for={search_for}&type={type}&page_index={page_index}&page_size={page_size}&is_visible={is_visible}&is_active={is_active}]
 
 + Parameters
-    + search_for: ( string)
-    + type: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + is_visible: ( object)
-    + is_active: true ( object)
+    + search_for: (optional, string)
+    + type: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + is_visible: (optional, object)
+    + is_active: true (optional, object)
     + company_alias: ( )
 
 + Request
@@ -2641,12 +2641,12 @@ Returns paged collection of POIs.
 ### Get Collection [GET /companies/{company_alias}/resources/pois?search_for={search_for}&type={type}&page_index={page_index}&page_size={page_size}&is_visible={is_visible}&is_active={is_active}]
 
 + Parameters
-    + search_for: ( string)
-    + type: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
-    + is_visible: ( object)
-    + is_active: true ( object)
+    + search_for: (optional, string)
+    + type: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
+    + is_visible: (optional, object)
+    + is_active: true (optional, object)
     + company_alias: ( )
 
 + Request
@@ -2791,9 +2791,9 @@ Returns company Countries.
 ### Get Collection [GET /resources/countries?search_for={search_for}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + search_for: ( string)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + search_for: (optional, string)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -3170,7 +3170,7 @@ So table below describe reason phrases that can occurs during Booking process an
 
     + Body
 
-            { "billing_contact_id": 111, "passenger_id": 222, "service_type_id": 10, "passenger_count": 3, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 2, "is_handicap_access_required": true, "vehicle_types": [ 11, 12, 13 ], "promotion_code": "Promo", "scheduled_pickup_at": "2015-12-11T00:57:23+02:00", "duration": 150, "distance": 33.33, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 55.7777, "longitude": 33.5555 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } }
+            { "billing_contact_id": 111, "passenger_id": 222, "service_type_id": 10, "passenger_count": 3, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 2, "is_handicap_access_required": true, "vehicle_types": [ 11, 12, 13 ], "promotion_code": "Promo", "scheduled_pickup_at": "2015-12-11T21:50:28+02:00", "duration": 150, "distance": 33.33, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 55.7777, "longitude": 33.5555 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } }
 
 + Response 200
 
@@ -3267,7 +3267,7 @@ So table below describe reason phrases that can occurs during Booking process an
 
     + Body
 
-            { "search_id": 111, "vehicle_types": [ 1, 2 ], "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-10T16:57:23+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
+            { "search_id": 111, "vehicle_types": [ 1, 2 ], "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-11T13:50:28+03:00" }, "payment_type_id": 1, "credit_card_id": 0 }
 
 + Response 200
 
@@ -3360,7 +3360,7 @@ So table below describe reason phrases that can occurs during Booking process an
 
     + Body
 
-            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-10T16:57:23+03:00" }, "payment_type_id": 1, "credit_card_id": 1 }
+            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-11T13:50:28+03:00" }, "payment_type_id": 1, "credit_card_id": 1 }
 
 + Response 200
 
@@ -3451,7 +3451,7 @@ So table below describe reason phrases that can occurs during Booking process an
 
     + Body
 
-            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-10T16:57:23+03:00" }, "payment_type_id": 1, "credit_card_id": 1 }
+            { "search_result_id": 111, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" }, "return_trip_info": { "search_result_id": 112, "passengers": [ { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" } ], "applied_optional_rates": [ 1, 2 ], "pickup_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "21Y91S" }, "dropoff_flight_info": { "airline_name": "Atlantic Airlines", "airline_code": "AA", "flight_number": "18U23D" } }, "credit_card_info": { "card_number": "5361656386674007", "card_holder_name": "Wesley Devis", "billing_address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "expires_at": "2016-08-11T13:50:28+03:00" }, "payment_type_id": 1, "credit_card_id": 1 }
 
 
 ## Group Customer Self Reservation
@@ -3481,7 +3481,7 @@ Returns Customer Self detailed reservation info
 
     + Body
 
-            { "actual_pickup_at": "2015-12-10T18:12:23+02:00", "scheduled_on_spot_at": "2015-12-10T18:27:23+02:00", "actual_on_spot_at": "2015-12-10T18:42:23+02:00", "dropoff_at": "2015-12-10T18:57:23+02:00", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "booking_contact": { "account_id": 1, "account_number": "54321", "first_name": "Jared", "last_name": "Clayton", "company": "Limo Anywhere", "phone": "+1-234-2222222", "email": "test_2@test.com" }, "passengers": [ { "account_id": 1, "account_number": "98765", "first_name": "Harlan", "last_name": "Gareth", "company": "Limo Anywhere", "phone": "+1-234-3333333", "email": "test_3@test.com" } ], "passenger_count": 2, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 0, "is_handicap_access_required": false, "promotion_code": "Promo", "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 55.7777, "longitude": 33.5555 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "charges": [ { "rate_id": 11, "group": "base_rate", "name": "Base Rate", "details": { "type": "fixed", "unit_value": 12.0, "unit_count": 1.0, "is_vat_tax": true }, "value": 12.0 }, { "rate_id": 2, "group": "discount1", "name": "Discount", "details": { "type": "multiplier", "unit_value": 3.0, "unit_count": 2.0, "is_vat_tax": true }, "value": 9.0 } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "rental_agreement_id": 1, "rental_agreement_name": "Rental Agreement", "notes": "Some additional information about reservation", "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-10T19:57:23+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+            { "actual_pickup_at": "2015-12-11T15:05:28+02:00", "scheduled_on_spot_at": "2015-12-11T15:20:28+02:00", "actual_on_spot_at": "2015-12-11T15:35:28+02:00", "dropoff_at": "2015-12-11T15:50:28+02:00", "billing_contact": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "booking_contact": { "account_id": 1, "account_number": "54321", "first_name": "Jared", "last_name": "Clayton", "company": "Limo Anywhere", "phone": "+1-234-2222222", "email": "test_2@test.com" }, "passengers": [ { "account_id": 1, "account_number": "98765", "first_name": "Harlan", "last_name": "Gareth", "company": "Limo Anywhere", "phone": "+1-234-3333333", "email": "test_3@test.com" } ], "passenger_count": 2, "luggage_count": 5, "infant_child_seat_count": 0, "booster_child_seat_count": 1, "toddler_child_seat_count": 0, "is_handicap_access_required": false, "promotion_code": "Promo", "stops": [ { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Stop Address", "phone": "+1-234-3333330", "country_code": "US", "state_code": "NY", "postal_code": "33333", "county": "Medion", "city": "New York", "address_line1": "345 Main Street", "address_line2": "345 Second Street", "latitude": 55.7777, "longitude": 33.5555 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } } ], "charges": [ { "rate_id": 11, "group": "base_rate", "name": "Base Rate", "details": { "type": "fixed", "unit_value": 12.0, "unit_count": 1.0, "is_vat_tax": true }, "value": 12.0 }, { "rate_id": 2, "group": "discount1", "name": "Discount", "details": { "type": "multiplier", "unit_value": 3.0, "unit_count": 2.0, "is_vat_tax": true }, "value": 9.0 } ], "misc_info": { "customer_notes": "Some Notes", "referral_source": "123", "group_name": "Custom Group", "occasion": "IT Conference", "reference_number": "12345", "is_greeting_sign_required": true }, "rental_agreement_id": 1, "rental_agreement_name": "Rental Agreement", "notes": "Some additional information about reservation", "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-11T16:50:28+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
 
 
 ## Collections [/Collections]
@@ -3490,17 +3490,17 @@ Returns Customer Self reservation collection
 ### Get Collection [GET /customers/self/reservations?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&invoice_id={invoice_id}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + from: ( object)
-    + to: ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + passenger_id: ( object)
-    + is_paid: ( object)
-    + invoice_id: ( object)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + from: (optional, object)
+    + to: (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + passenger_id: (optional, object)
+    + is_paid: (optional, object)
+    + invoice_id: (optional, object)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -3517,22 +3517,22 @@ Returns Customer Self reservation collection
 
     + Body
 
-            { "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-10T19:57:23+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+            { "id": 1, "confirmation_number": "12345", "state": "created", "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-11T16:50:28+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
 
 
 ### Get 'Upcoming' Collection [GET /customers/self/reservations/upcoming?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + from: ( object)
-    + to: ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + passenger_id: ( object)
-    + is_paid: ( object)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + from: (optional, object)
+    + to: (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + passenger_id: (optional, object)
+    + is_paid: (optional, object)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -3549,22 +3549,22 @@ Returns Customer Self reservation collection
 
     + Body
 
-            { "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-10T19:57:23+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+            { "id": 1, "confirmation_number": "12345", "state": "created", "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-11T16:50:28+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
 
 
 ### Get 'Completed' Collection [GET /customers/self/reservations/completed?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + from: ( object)
-    + to: ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + passenger_id: ( object)
-    + is_paid: ( object)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + from: (optional, object)
+    + to: (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + passenger_id: (optional, object)
+    + is_paid: (optional, object)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -3581,22 +3581,22 @@ Returns Customer Self reservation collection
 
     + Body
 
-            { "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-10T19:57:23+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+            { "id": 1, "confirmation_number": "12345", "state": "created", "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-11T16:50:28+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
 
 
 ### Get 'In Progress' Collection [GET /customers/self/reservations/in_progress?from={from}&to={to}&search_for={search_for}&passenger_id={passenger_id}&is_paid={is_paid}&page_index={page_index}&page_size={page_size}]
 
 + Parameters
-    + from: ( object)
-    + to: ( object)
-    + search_in: ( object)
-    + search_for: ( string)
-    + passenger_id: ( object)
-    + is_paid: ( object)
-    + sort_by: ( object)
-    + sort_order: ( object)
-    + page_index: 1 ( int)
-    + page_size: 20 ( int)
+    + from: (optional, object)
+    + to: (optional, object)
+    + search_in: (optional, object)
+    + search_for: (optional, string)
+    + passenger_id: (optional, object)
+    + is_paid: (optional, object)
+    + sort_by: (optional, object)
+    + sort_order: (optional, object)
+    + page_index: 1 (optional, int)
+    + page_size: 20 (optional, int)
 
 + Request
 
@@ -3613,7 +3613,7 @@ Returns Customer Self reservation collection
 
     + Body
 
-            { "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "id": 1, "confirmation_number": "12345", "state": "created", "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-10T19:57:23+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
+            { "id": 1, "confirmation_number": "12345", "state": "created", "passenger": { "account_id": 1, "account_number": "12345", "first_name": "Alex", "last_name": "Jonah", "company": "Limo Anywhere", "phone": "+1-234-1111111", "email": "test_1@test.com" }, "status_id": 1, "status_name": "NEW", "service_type_id": 1, "service_type_name": "LimoService", "vehicle_type_id": 1, "vehicle_type_name": "BMW", "scheduled_pickup_at": "2015-12-11T16:50:28+02:00", "duration": 120, "distance": 55.55, "pickup": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Pick Up Address", "phone": "+1-234-1111110", "country_code": "US", "state_code": "NY", "postal_code": "11111", "county": "Delaware", "city": "New York", "address_line1": "123 Main Street", "address_line2": "123 Second Street", "latitude": 55.5555, "longitude": 33.3333 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "dropoff": { "type": "address", "scheduled_arriving_at": "02:30:00", "instructions": "Some instructions", "address": { "name": "Drop Off Address", "phone": "+1-234-2222220", "country_code": "US", "state_code": "NY", "postal_code": "22222", "county": "Otsego", "city": "New York", "address_line1": "234 Main Street", "address_line2": "234 Second Street", "latitude": 55.6666, "longitude": 33.4444 }, "flight": { "airport_code": "AAO", "airport_terminal": "Terminal B", "airline_name": "Air France", "airline_code": "AF", "flight_number": "7813UD", "tail_number": "2100925", "departing_to_or_arriving_from": "Paris", "departing_or_arriving_at": "02:15:00", "airport_pickup_option": "inside" }, "cruise": { "seaport_code": "NYC", "cruise_ship_name": "New York", "cruiseline_name": "New York Cruises", "departing_to_or_arriving_from": "New York", "departing_or_arriving_at": "02:45:00" } }, "payment_info": { "payment_type_id": 1, "payment_type_name": "Test Payment Type", "credit_card_id": 111, "credit_card_number_first_digit": "4111", "credit_card_number_last_digits": "1111", "credit_card_network": "visa", "terms": "net15_days", "total_amount": 99.99, "authorized_amount": 11.11, "receipted_amount": 88.88, "status": "unpaid", "total_outstanding": 11.11 } }
 
 
 ## Cancell [/Cancell]
@@ -3649,7 +3649,7 @@ Returns collection of available triggers for reservation by specified ID.
 
 + Parameters
     + id: `1` (required, int)
-    + include_statuses: ( object)
+    + include_statuses: (optional, object)
 
 + Request
 
